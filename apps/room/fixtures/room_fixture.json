@@ -1,0 +1,35 @@
+[
+  {
+    "model": "room.room",
+    "pk": 1,
+    "fields": {
+      "room_name": "Room 101",
+      "dorm_room_name": "",
+      "room_description": "A cozy room with a beautiful view.",
+      "room_blocked": false,
+      "room_type": 1
+    }
+  },
+  {
+    "model": "room.room",
+    "pk": 2,
+    "fields": {
+      "room_name": "Room 201",
+      "dorm_room_name": "",
+      "room_description": "A spacious room with modern amenities.",
+      "room_blocked": false,
+      "room_type": 1
+    }
+  },
+  {
+    "model": "room.room",
+    "pk": 3,
+    "fields": {
+      "room_name": "Dorm Room 1",
+      "dorm_room_name": "Dorm 1",
+      "room_description": "A shared dorm room with comfortable beds.",
+      "room_blocked": false,
+      "room_type": 2
+    }
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "model": "app.hotel",
+    "pk": 1,
+    "fields": {
+      "property_name": "Sample Hotel",
+      "property_image": "property_images/sample_image.jpg",
+      "property_description": "Welcome to Sample Hotel, where luxury meets comfort.",
+      "property_primary_language": "English",
+      "property_phone": "+1234567890",
+      "property_email": "info@samplehotel.com",
+      "property_address1": "123 Main Street",
+      "property_address2": "Suite 100",
+      "property_city": "Sample City",
+      "property_state": "Sample State",
+      "property_zip": "12345",
+      "property_country": "Sample Country",
+      "property_latitude": "12.3456",
+      "property_longitude": "78.9012",
+      "property_check_in_time": "14:00:00",
+      "property_check_out_time": "12:00:00",
+      "property_late_check_out_allowed": true,
+      "property_late_check_out_type": "value",
+      "property_late_check_out_value": 20.0,
+      "property_terms_and_conditions": "Please read and agree to the terms and conditions before making a reservation."
+    }
+  }
+]

@@ -8,37 +8,49 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
+from django.shortcuts import redirect
+from django.shortcuts import render
 
 
-@login_required(login_url="/login/")
-def index(request):
-    context = {'segment': 'index'}
+@login_required
+def index_view(request):
+    return redirect('dashboard')
 
-    html_template = loader.get_template('home/index.html')
-    return HttpResponse(html_template.render(context, request))
+@login_required
+def dashboard_view(request):
+    return render(request, 'home/dashboard.html')
 
 
-@login_required(login_url="/login/")
-def pages(request):
-    context = {}
-    # All resource paths end in .html.
-    # Pick out the html file name from the url. And load that template.
-    try:
+@login_required
+def calendar_view(request):
+    return render(request, 'home/calendar.html')
 
-        load_template = request.path.split('/')[-1]
 
-        if load_template == 'admin':
-            return HttpResponseRedirect(reverse('admin:index'))
-        context['segment'] = load_template
+@login_required
+def reservations_view(request):
+    return render(request, 'home/reservations.html')
 
-        html_template = loader.get_template('home/' + load_template)
-        return HttpResponse(html_template.render(context, request))
 
-    except template.TemplateDoesNotExist:
+@login_required
+def groups_view(request):
+    return render(request, 'home/groups.html')
 
-        html_template = loader.get_template('home/page-404.html')
-        return HttpResponse(html_template.render(context, request))
 
-    except:
-        html_template = loader.get_template('home/page-500.html')
-        return HttpResponse(html_template.render(context, request))
+@login_required
+def house_account_view(request):
+    return render(request, 'home/house-account.html')
+
+
+@login_required
+def rates_availability_view(request):
+    return render(request, 'home/rates-and-availability.html')
+
+
+@login_required
+def guests_view(request):
+    return render(request, 'home/guests.html')
+
+
+@login_required
+def reports_view(request):
+    return render(request, 'home/reports.html')

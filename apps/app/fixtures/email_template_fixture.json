@@ -1,0 +1,36 @@
+[
+  {
+    "model": "app.emailtemplate",
+    "pk": 1,
+    "fields": {
+      "email_type": "nonMarketing",
+      "name": "Template 1",
+      "from_email": "sender@example.com",
+      "from_name": "Sender Name",
+      "subject": "Subject 1",
+      "body": "Body 1",
+      "reply_to": "replyto@example.com",
+      "reply_to_name": "Reply To Name",
+      "autofill_all_languages": false,
+      "cc": "cc@example.com",
+      "bcc": "bcc@example.com"
+    }
+  },
+  {
+    "model": "app.emailtemplate",
+    "pk": 2,
+    "fields": {
+      "email_type": "marketing",
+      "name": "Template 2",
+      "from_email": "marketing@example.com",
+      "from_name": "Marketing Name",
+      "subject": "Subject 2",
+      "body": "Body 2",
+      "reply_to": null,
+      "reply_to_name": null,
+      "autofill_all_languages": true,
+      "cc": null,
+      "bcc": null
+    }
+  }
+]

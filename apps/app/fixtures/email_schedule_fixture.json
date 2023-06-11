@@ -1,0 +1,26 @@
+[
+  {
+    "model": "app.emailschedule",
+    "pk": 1,
+    "fields": {
+      "email_template": 1,
+      "schedule_name": "Schedule 1",
+      "reservation_status_change": "confirmed",
+      "reservation_event": "after_booking",
+      "days": 7,
+      "time": "12:00:00"
+    }
+  },
+  {
+    "model": "app.emailschedule",
+    "pk": 2,
+    "fields": {
+      "email_template": 2,
+      "schedule_name": "Schedule 2",
+      "reservation_status_change": "not_confirmed",
+      "reservation_event": "after_check_out",
+      "days": 3,
+      "time": "10:30:00"
+    }
+  }
+]

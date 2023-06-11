@@ -1,0 +1,164 @@
+[
+    {
+        "model": "app.hotelamenity",
+        "pk": 1,
+        "fields": {
+            "name": "24-Hour Front Desk",
+            "category": "CHECK_IN_FRONT_DESK_SERVICES",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 2,
+        "fields": {
+            "name": "Concierge Service",
+            "category": "CHECK_IN_FRONT_DESK_SERVICES",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 3,
+        "fields": {
+            "name": "Room Service",
+            "category": "GENERAL_GUEST_SERVICES",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 4,
+        "fields": {
+            "name": "Outdoor Pool",
+            "category": "POOL_SPA_WELLNESS",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 5,
+        "fields": {
+            "name": "Fitness Center",
+            "category": "POOL_SPA_WELLNESS",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 6,
+        "fields": {
+            "name": "Game Room",
+            "category": "ENTERTAINMENT_RECREATION",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 7,
+        "fields": {
+            "name": "Restaurant",
+            "category": "FOOD_BEVERAGE",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 8,
+        "fields": {
+            "name": "Parking",
+            "category": "PARKING_TRANSPORTATION",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 9,
+        "fields": {
+            "name": "Children's Play Area",
+            "category": "FAMILY_SERVICES_ACTIVITIES",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 10,
+        "fields": {
+            "name": "Lounge",
+            "category": "COMMON_AREAS",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 11,
+        "fields": {
+            "name": "Laundry Service",
+            "category": "CLEANING_SERVICES",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 12,
+        "fields": {
+            "name": "Meeting Facilities",
+            "category": "BUSINESS_SERVICES",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 13,
+        "fields": {
+            "name": "Gift Shop",
+            "category": "SHOPPING",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 14,
+        "fields": {
+            "name": "Wheelchair Accessible",
+            "category": "ACCESSIBILITY",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 15,
+        "fields": {
+            "name": "Security Personnel",
+            "category": "SAFETY_SECURITY",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 16,
+        "fields": {
+            "name": "Environmentally Friendly",
+            "category": "ENVIRONMENT_SUSTAINABILITY",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 17,
+        "fields": {
+            "name": "Enhanced Cleaning Procedures",
+            "category": "SANITATION_HYGIENE_GUEST_HEALTH",
+            "hotel": 1
+        }
+    },
+    {
+        "model": "app.hotelamenity",
+        "pk": 18,
+        "fields": {
+            "name": "Custom Amenity",
+            "category": "CUSTOM_AMENITY",
+            "hotel": 1
+        }
+    }
+]
