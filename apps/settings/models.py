@@ -2,12 +2,26 @@ from django.db import models
 
 
 class Hotel(models.Model):
+    PROPERTY_TYPE_CHOICES = [
+        ('hotel', 'Hotel'),
+        ('motel', 'Motel'),
+        ('resort', 'Resort'),
+        ('guesthouse', 'Guest House'),
+        ('bed_breakfast', 'Bed and Breakfast'),
+        ('apartment', 'Apartment'),
+        ('villa', 'Villa'),
+        ('cottage', 'Cottage'),
+        ('hostel', 'Hostel'),
+        ('inn', 'Inn'),
+    ]
     property_name = models.CharField(max_length=255, help_text='Property name')
+    property_type = models.CharField(max_length=50, choices=PROPERTY_TYPE_CHOICES, help_text='Property type')
     property_image = models.ImageField(upload_to='property_images')
     property_description = models.TextField(help_text='Property description')
     property_primary_language = models.CharField(max_length=255, help_text='Property primary language')
     property_phone = models.CharField(max_length=20, help_text='Property phone number')
     property_email = models.EmailField(help_text='Property main email address')
+    property_website = models.URLField(max_length=200, help_text='Property website URL', blank=True)
     # Property address
     property_address1 = models.CharField(max_length=255, help_text='Property address line 1')
     property_address2 = models.CharField(max_length=255, help_text='Property address line 2')

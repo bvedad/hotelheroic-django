@@ -1,6 +1,6 @@
 [
   {
-    "model": "app.hotel",
+    "model": "settings.hotel",
     "pk": 1,
     "fields": {
       "property_name": "Sample Hotel",

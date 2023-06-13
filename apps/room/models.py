@@ -18,10 +18,15 @@ class Room(models.Model):
 
 
 class RoomType(models.Model):
+    PRIVACY_CHOICES = (
+        (False, 'Shared'),
+        (True, 'Private'),
+    )
+
     room_type_name = models.CharField(max_length=255, help_text="Room Type Name")
     room_type_name_short = models.CharField(max_length=255, help_text="Room Type Short Name")
     room_type_description = models.TextField(help_text="Room Type Description")
-    is_private = models.BooleanField(help_text="Whether room is private or shared")
+    is_private = models.BooleanField(choices=PRIVACY_CHOICES, help_text="Whether room is private or shared")
     max_guests = models.IntegerField(help_text="Max number of guests allowed in the room type")
     adults_included = models.IntegerField(help_text="Number of adults included on the basic room rate")
     children_included = models.IntegerField(help_text="Number of children included on the basic room rate")
