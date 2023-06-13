@@ -8,7 +8,7 @@ urlpatterns = [
          name='settings_property_details_property_profile'),
     path('property-details/property-amenities/', views.settings_property_details_property_amenities_view,
          name='settings_property_details_property_amenities'),
-    path('property-details/acommodation-types/', views.settings_property_details_acommodation_types_view,
+    path('property-details/accommodation-types/', views.settings_property_details_acommodation_types_view,
          name='settings_property_details_accomodation_types'),
     path('property-configuration/', views.settings_property_configuration_view,
          name='settings_property_configuration'),

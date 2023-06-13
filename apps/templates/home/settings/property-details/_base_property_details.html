@@ -10,16 +10,16 @@
     <div class="nav-wrapper position-relative">
         <ul class="nav nav-pills nav-fill flex-column flex-sm-row">
             <li class="nav-item">
-                <a class="nav-link mb-sm-3 mb-md-0 active" data-bs-toggle="tab" href="#">Home</a>
+                <a class="nav-link mb-sm-3 mb-md-0 {% if '/property-profile' in request.path %} active {% endif %}"
+                   href="{% url 'settings_property_details_property_profile' %}">Property Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link mb-sm-3 mb-md-0" data-bs-toggle="tab" href="#">Profile</a>
+                <a class="nav-link mb-sm-3 mb-md-0 {% if '/property-amenities' in request.path %} active {% endif %}"
+                   href="{% url 'settings_property_details_property_amenities' %}">Property Amenities</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link mb-sm-3 mb-md-0" data-bs-toggle="tab" href="#">Settings</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link mb-sm-3 mb-md-0" data-bs-toggle="tab" href="#">Messages</a>
+                <a class="nav-link mb-sm-3 mb-md-0 {% if '/accommodation-types' in request.path %} active {% endif %}"
+                   href="{% url 'settings_property_details_accomodation_types' %}">Accommodation Types</a>
             </li>
         </ul>
     </div>
