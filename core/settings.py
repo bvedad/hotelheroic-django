@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'crispy_forms',
     "crispy_bootstrap5",
+    "django_tables2",
+    'django_filters',
     "heroicons",
     'apps.home',  # Enable the inner home (home)
     'apps.authentication',
@@ -190,3 +192,5 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap5-responsive.html"
