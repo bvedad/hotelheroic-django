@@ -5,8 +5,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.app.models import EmailTemplate, EmailSchedule
 from apps.reservation.models import ReservationSource
-from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm
-from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable
+from apps.room.models import RoomType
+from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
+    RoomTypeForm
+from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
+    RoomTypeTable
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -25,11 +28,6 @@ def settings_property_details_property_profile_view(request):
 @login_required
 def settings_property_details_property_amenities_view(request):
     return render(request, 'home/settings/property-details/property-amenities.html')
-
-
-@login_required
-def settings_property_details_acommodation_types_view(request):
-    return render(request, 'home/settings/property-details/acommodation-types.html')
 
 
 @login_required
@@ -164,6 +162,7 @@ def settings_taxes_and_fees_create_view(request):
     context = {'form': form}
     return render(request, 'home/settings/property-configuration/taxes-and-fees/create.html', context)
 
+
 class ReservationSourcesListView(LoginRequiredMixin, SingleTableView):
     model = ReservationSource
     table_class = ReservationSourceTable
@@ -198,3 +197,39 @@ def settings_reservation_sources_create_view(request):
         form = ReservationSourceForm()
     context = {'form': form}
     return render(request, 'home/settings/property-configuration/reservation-source/create.html', context)
+
+
+class RoomTypeListView(LoginRequiredMixin, SingleTableView):
+    model = RoomType
+    table_class = RoomTypeTable
+    template_name = 'home/settings/property-details/room-type/index.html'
+
+
+@login_required
+def settings_room_type_edit_view(request, pk):
+    room_type = get_object_or_404(RoomType, pk=pk)
+
+    if request.method == 'POST':
+        form = RoomTypeForm(request.POST, instance=room_type)
+        if form.is_valid():
+            form.save()
+        return redirect(
+            'settings_room_type')
+    else:
+        # Render the edit form
+        form = RoomTypeForm(instance=room_type)
+        context = {'form': form}
+        return render(request, 'home/settings/property-details/room-type/edit.html', context)
+
+
+@login_required
+def settings_room_type_create_view(request):
+    if request.method == 'POST':
+        form = RoomTypeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_room_type')
+    else:
+        form = RoomTypeForm()
+    context = {'form': form}
+    return render(request, 'home/settings/property-details/room-type/create.html', context)

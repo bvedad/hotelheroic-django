@@ -62,15 +62,6 @@ class HotelForm(forms.ModelForm):
         )
 
 
-class RoomTypeForm(forms.ModelForm):
-    class Meta:
-        model = RoomType
-        fields = '__all__'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-
 class EmailTemplateForm(forms.ModelForm):
     class Meta:
         model = EmailTemplate
@@ -118,6 +109,20 @@ class TaxAndFeeForm(forms.ModelForm):
 class ReservationSourceForm(forms.ModelForm):
     class Meta:
         model = ReservationSource
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
+        self.helper.add_input(
+            Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back();"))
+
+
+class RoomTypeForm(forms.ModelForm):
+    class Meta:
+        model = RoomType
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
