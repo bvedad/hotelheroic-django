@@ -20,6 +20,10 @@
                 <a class="nav-link mb-sm-3 mb-md-0 {% if '/item-categories' in request.path %} active {% endif %}"
                    href="{% url 'settings_item_category_index' %}">Item Categories</a>
             </li>
+            <li class="nav-item flex-grow-0">
+                <a class="nav-link mb-sm-3 mb-md-0 {% if '/items' in request.path %} active {% endif %}"
+                   href="{% url 'settings_item_index' %}">Items</a>
+            </li>
         </ul>
     </div>
 

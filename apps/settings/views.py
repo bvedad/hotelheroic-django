@@ -4,13 +4,13 @@ from django_tables2 import SingleTableView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.app.models import EmailTemplate, EmailSchedule
-from apps.item.models import ItemCategory
+from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
-    RoomTypeForm, ItemCategoryForm
+    RoomTypeForm, ItemCategoryForm, ItemForm
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
-    RoomTypeTable, ItemCategoryTable
+    RoomTypeTable, ItemCategoryTable, ItemTable
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -270,3 +270,39 @@ def settings_item_category_create_view(request):
         form = ItemCategoryForm()
     context = {'form': form}
     return render(request, 'home/settings/property-configuration/item-category/create.html', context)
+
+
+class ItemListView(LoginRequiredMixin, SingleTableView):
+    model = Item
+    table_class = ItemTable
+    template_name = 'home/settings/property-configuration/item/index.html'
+
+
+@login_required
+def settings_item_edit_view(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+
+    if request.method == 'POST':
+        form = ItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+        return redirect(
+            'settings_item_index')
+    else:
+        # Render the edit form
+        form = ItemForm(instance=item)
+        context = {'form': form}
+        return render(request, 'home/settings/property-configuration/item/edit.html', context)
+
+
+@login_required
+def settings_item_create_view(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_item_index')
+    else:
+        form = ItemForm()
+    context = {'form': form}
+    return render(request, 'home/settings/property-configuration/item/create.html', context)
