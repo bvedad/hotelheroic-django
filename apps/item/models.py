@@ -26,9 +26,7 @@ class Item(models.Model):
     # stop_sell_met = models.BooleanField(blank=True, null=True,
     #                                   help_text='Whether the item is at or below the value set for stop-sell threshold')
 
-    taxes = models.ManyToManyField('taxesandfees.Taxes', blank=True, related_name='items',
-                                   help_text='Details of the taxes applicable')
-    fees = models.ManyToManyField('taxesandfees.Fee', blank=True, related_name='items', help_text='Details of the fees applicable')
+    taxes_and_fees = models.ManyToManyField('taxesandfees.TaxAndFee', blank=True, related_name='items', help_text='Details of the fees applicable')
 
     price_without_fees_and_taxes = models.FloatField(blank=True, null=True,
                                                      help_text='Item price subtracting the included taxes')
