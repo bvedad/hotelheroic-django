@@ -4,8 +4,9 @@ from django_tables2 import SingleTableView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.app.models import EmailTemplate, EmailSchedule
-from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm
-from apps.settings.tables import EmailTemplateTable, EmailScheduleTable
+from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm
+from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable
+from apps.taxesandfees.models import TaxAndFee
 
 
 @login_required
@@ -32,7 +33,7 @@ def settings_property_details_acommodation_types_view(request):
 
 @login_required
 def settings_property_configuration_view(request):
-    return render(request, 'home/settings/property-configuration.html')
+    return redirect('settings_taxes_and_fees')
 
 
 @login_required
@@ -119,3 +120,36 @@ def settings_email_configuration_email_schedules_create(request):
         form = EmailScheduleForm()
     context = {'form': form}
     return render(request, 'home/settings/email-configuration/email-schedule-create.html', context)
+
+
+class TaxesAndFeesListView(LoginRequiredMixin, SingleTableView):
+    model = TaxAndFee
+    table_class = TaxAndFeeTable
+    template_name = 'home/settings/property-configuration/taxes-and-fees/index.html'
+
+
+@login_required
+def settings_taxes_and_fees_edit_view(request, pk):
+    tax_and_fee_base_model = get_object_or_404(TaxAndFee, pk=pk)
+
+    if request.method == 'POST':
+        return redirect(
+            'settings_taxes_and_fees')
+    else:
+        # Render the edit form
+        form = TaxAndFeeForm(instance=tax_and_fee_base_model)
+        context = {'form': form}
+        return render(request, 'home/settings/property-configuration/taxes-and-fees/', context)
+
+
+@login_required
+def settings_taxes_and_fees_create_view(request):
+    if request.method == 'POST':
+        form = TaxAndFeeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_taxes_and_fees')
+    else:
+        form = TaxAndFeeForm()
+    context = {'form': form}
+    return render(request, 'home/settings/property-configuration/taxes-and-fees/create.html', context)

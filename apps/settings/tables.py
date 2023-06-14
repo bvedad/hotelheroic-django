@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 from apps.app.models import EmailTemplate, EmailSchedule
+from apps.taxesandfees.models import TaxAndFee
 
 
 class EmailTemplateTable(tables.Table):
@@ -23,3 +24,12 @@ class EmailScheduleTable(tables.Table):
     class Meta:
         model = EmailSchedule
         fields = ('schedule_name', 'email_template')
+
+class TaxAndFeeTable(tables.Table):
+    def render_name(self, value, record):
+        edit_url = reverse('settings_taxes_and_fees_edit', args=[record.pk])
+        return format_html('<a href="{}">{}</a>', edit_url, value)
+
+    class Meta:
+        model = TaxAndFee
+        fields = ('name', 'inclusive_or_exclusive', 'amount')
