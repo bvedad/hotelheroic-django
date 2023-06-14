@@ -38,6 +38,9 @@ class ItemCategory(models.Model):
     category_code = models.CharField(max_length=255, help_text='Category code')
     category_color = models.CharField(max_length=255, help_text='Category color (like #3b7be7)')
 
+    def __str__(self):
+        return self.category_name
+
 
 class CustomItem(models.Model):
     reservation = models.ForeignKey('reservation.Reservation', on_delete=models.CASCADE,
