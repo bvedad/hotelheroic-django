@@ -13,7 +13,7 @@ class Item(models.Model):
     sku = models.CharField(max_length=255, help_text='Item SKU')
     item_code = models.CharField(max_length=255, help_text='Item code')
     name = models.CharField(max_length=255, help_text='Item name')
-    category = models.ForeignKey('item.ItemCategories', on_delete=models.CASCADE, blank=True, null=True)
+    category = models.ForeignKey('item.ItemCategory', on_delete=models.CASCADE, blank=True, null=True)
     description = models.TextField(help_text='Item description')
     price = models.FloatField(help_text='Item price')
     stock_inventory = models.BooleanField(help_text='Track stock inventory for this item')
@@ -33,7 +33,7 @@ class Item(models.Model):
     grand_total = models.FloatField(blank=True, null=True, help_text='Item price with fees and taxes')
 
 
-class ItemCategories(models.Model):
+class ItemCategory(models.Model):
     category_name = models.CharField(max_length=255, help_text='Category name')
     category_code = models.CharField(max_length=255, help_text='Category code')
     category_color = models.CharField(max_length=255, help_text='Category color (like #3b7be7)')
