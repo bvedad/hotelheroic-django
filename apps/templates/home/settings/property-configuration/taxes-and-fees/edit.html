@@ -3,11 +3,11 @@
 
 {% block title %} Taxes And Fees - Edit {% endblock %}
 
-{% block taxes_and_fees_content %}
+{% block property_configuration_content %}
     <div class="p-4">
-        <form method="post" action="{% url 'settings_taxes_and_fees_create' %}">
+        <form method="post">
             {% csrf_token %}
             {% crispy form %}
         </form>
     </div>
-{% endblock taxes_and_fees_content %}
+{% endblock property_configuration_content %}

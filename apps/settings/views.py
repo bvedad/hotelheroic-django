@@ -4,8 +4,9 @@ from django_tables2 import SingleTableView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.app.models import EmailTemplate, EmailSchedule
-from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm
-from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable
+from apps.reservation.models import ReservationSource
+from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm
+from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -56,6 +57,9 @@ def settings_email_configuration_email_templates_edit_view(request, pk):
     email_template = get_object_or_404(EmailTemplate, pk=pk)
 
     if request.method == 'POST':
+        form = EmailTemplateForm(request.POST, instance=email_template)
+        if form.is_valid():
+            form.save()
         return redirect(
             'settings_email_configuration_email_templates')  # Replace 'roomtype_list' with the actual URL name for the room type list view
     else:
@@ -94,6 +98,9 @@ def settings_email_configuration_email_schedules_edit_view(request, pk):
     email_template = get_object_or_404(EmailSchedule, pk=pk)
 
     if request.method == 'POST':
+        form = EmailScheduleForm(request.POST, instance=email_template)
+        if form.is_valid():
+            form.save()
         return redirect(
             'settings_email_configuration_email_schedules')
     else:
@@ -133,13 +140,16 @@ def settings_taxes_and_fees_edit_view(request, pk):
     tax_and_fee_base_model = get_object_or_404(TaxAndFee, pk=pk)
 
     if request.method == 'POST':
+        form = TaxAndFeeForm(request.POST, instance=tax_and_fee_base_model)
+        if form.is_valid():
+            form.save()
         return redirect(
             'settings_taxes_and_fees')
     else:
         # Render the edit form
         form = TaxAndFeeForm(instance=tax_and_fee_base_model)
         context = {'form': form}
-        return render(request, 'home/settings/property-configuration/taxes-and-fees/', context)
+        return render(request, 'home/settings/property-configuration/taxes-and-fees/edit.html', context)
 
 
 @login_required
@@ -153,3 +163,38 @@ def settings_taxes_and_fees_create_view(request):
         form = TaxAndFeeForm()
     context = {'form': form}
     return render(request, 'home/settings/property-configuration/taxes-and-fees/create.html', context)
+
+class ReservationSourcesListView(LoginRequiredMixin, SingleTableView):
+    model = ReservationSource
+    table_class = ReservationSourceTable
+    template_name = 'home/settings/property-configuration/reservation-source/index.html'
+
+
+@login_required
+def settings_reservation_sources_edit_view(request, pk):
+    reservation_source = get_object_or_404(ReservationSource, pk=pk)
+
+    if request.method == 'POST':
+        form = ReservationSourceForm(request.POST, instance=reservation_source)
+        if form.is_valid():
+            form.save()
+        return redirect(
+            'settings_reservation_sources')
+    else:
+        # Render the edit form
+        form = ReservationSourceForm(instance=reservation_source)
+        context = {'form': form}
+        return render(request, 'home/settings/property-configuration/reservation-source/edit.html', context)
+
+
+@login_required
+def settings_reservation_sources_create_view(request):
+    if request.method == 'POST':
+        form = ReservationSourceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_reservation_sources')
+    else:
+        form = ReservationSourceForm()
+    context = {'form': form}
+    return render(request, 'home/settings/property-configuration/reservation-source/create.html', context)

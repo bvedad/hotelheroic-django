@@ -131,7 +131,7 @@ class ReservationNote(models.Model):
     user = models.ForeignKey('authentication.User', on_delete=models.CASCADE)
 
 
-class Source(models.Model):
+class ReservationSource(models.Model):
     source_name = models.CharField(max_length=255, help_text='Source Name')
     is_third_party = models.BooleanField(help_text='True if the source is from a third party')
     status = models.BooleanField(help_text='True if the source is active')

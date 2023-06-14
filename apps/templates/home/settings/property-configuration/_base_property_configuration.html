@@ -12,11 +12,15 @@
                 <a class="nav-link mb-sm-3 mb-md-0 {% if '/taxes-and-fees' in request.path %} active {% endif %}"
                    href="{% url 'settings_taxes_and_fees' %}">Taxes And Fees</a>
             </li>
+            <li class="nav-item flex-grow-0">
+                <a class="nav-link mb-sm-3 mb-md-0 {% if '/reservation-sources' in request.path %} active {% endif %}"
+                   href="{% url 'settings_reservation_sources' %}">Reservation Sources</a>
+            </li>
         </ul>
     </div>
 
-    {% block taxes_and_fees_content %}
-    {% endblock taxes_and_fees_content %}
+    {% block property_configuration_content %}
+    {% endblock property_configuration_content %}
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->

@@ -2,11 +2,11 @@
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
 
-{% block title %} Taxes And Fees {% endblock %}
+{% block title %} Reservation Sources {% endblock %}
 
 {% block property_configuration_content %}
     <div class="p-4">
-        <a href="{% url 'settings_taxes_and_fees_create' %}" class="btn btn-primary btn-sm mb-2">Create</a>
+        <a href="{% url 'settings_reservation_sources_create' %}" class="btn btn-primary btn-sm mb-2">Create</a>
         {% render_table table 'django_tables2/bootstrap.html' %}
     </div>
 {% endblock property_configuration_content %}
