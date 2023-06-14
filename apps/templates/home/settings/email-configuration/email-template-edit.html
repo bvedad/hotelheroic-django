@@ -5,7 +5,7 @@
 
 {% block email_configuration_content %}
     <div class="p-4">
-        <form method="post" action="{% url 'settings_email_configuration_email_templates_create' %}">
+        <form method="post">
             {% csrf_token %}
             {% crispy form %}
         </form>

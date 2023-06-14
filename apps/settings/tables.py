@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 from apps.app.models import EmailTemplate, EmailSchedule
+from apps.reservation.models import ReservationSource
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -33,3 +34,12 @@ class TaxAndFeeTable(tables.Table):
     class Meta:
         model = TaxAndFee
         fields = ('name', 'inclusive_or_exclusive', 'amount')
+
+class ReservationSourceTable(tables.Table):
+    def render_source_name(self, value, record):
+        edit_url = reverse('settings_reservation_sources_edit', args=[record.pk])
+        return format_html('<a href="{}">{}</a>', edit_url, value)
+
+    class Meta:
+        model = ReservationSource
+        fields = ('source_name', 'is_third_party', 'status')

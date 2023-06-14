@@ -1,11 +1,11 @@
 {% extends "home/settings/property-configuration/_base_property_configuration.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Taxes And Fees - Create {% endblock %}
+{% block title %} Reservation Sources - Edit {% endblock %}
 
 {% block property_configuration_content %}
     <div class="p-4">
-        <form method="post" action="{% url 'settings_taxes_and_fees_create' %}">
+        <form method="post">
             {% csrf_token %}
             {% crispy form %}
         </form>
