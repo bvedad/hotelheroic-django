@@ -12,6 +12,10 @@
                 <a class="nav-link mb-sm-3 mb-md-0 {% if '/email-templates' in request.path %} active {% endif %}"
                    href="{% url 'settings_email_configuration_email_templates' %}">Email Templates</a>
             </li>
+            <li class="nav-item flex-grow-0">
+                <a class="nav-link mb-sm-3 mb-md-0 {% if '/email-schedules' in request.path %} active {% endif %}"
+                   href="{% url 'settings_email_configuration_email_schedules' %}">Email Schedules</a>
+            </li>
         </ul>
     </div>
 

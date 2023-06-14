@@ -3,9 +3,9 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django_tables2 import SingleTableView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from apps.app.models import EmailTemplate
-from apps.settings.forms import HotelForm, EmailTemplateForm
-from apps.settings.tables import EmailTemplateTable
+from apps.app.models import EmailTemplate, EmailSchedule
+from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm
+from apps.settings.tables import EmailTemplateTable, EmailScheduleTable
 
 
 @login_required
@@ -51,11 +51,6 @@ def settings_email_configuration_view(request):
 
 
 @login_required
-def settings_email_configuration_email_templates_view(request):
-    return render(request, 'home/settings/email-configuration/email-templates.html')
-
-
-@login_required
 def settings_email_configuration_email_templates_edit_view(request, pk):
     email_template = get_object_or_404(EmailTemplate, pk=pk)
 
@@ -91,3 +86,36 @@ def settings_email_configuration_email_templates_create(request):
         form = EmailTemplateForm()
         context = {'form': form}
         return render(request, 'home/settings/email-configuration/email-template-create.html', context)
+
+
+@login_required
+def settings_email_configuration_email_schedules_edit_view(request, pk):
+    email_template = get_object_or_404(EmailSchedule, pk=pk)
+
+    if request.method == 'POST':
+        return redirect(
+            'settings_email_configuration_email_schedules')
+    else:
+        # Render the edit form
+        form = EmailScheduleForm(instance=email_template)
+        context = {'form': form}
+        return render(request, 'home/settings/email-configuration/email-schedule-edit.html', context)
+
+
+class EmailScheduleListView(LoginRequiredMixin, SingleTableView):
+    model = EmailSchedule
+    table_class = EmailScheduleTable
+    template_name = 'home/settings/email-configuration/email-schedules.html'
+
+
+@login_required
+def settings_email_configuration_email_schedules_create(request):
+    if request.method == 'POST':
+        form = EmailScheduleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_email_configuration_email_schedules')
+    else:
+        form = EmailScheduleForm()
+    context = {'form': form}
+    return render(request, 'home/settings/email-configuration/email-schedule-create.html', context)

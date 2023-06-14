@@ -1,0 +1,12 @@
+{% extends "home/settings/email-configuration/_base_email_configuration.html" %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+{% block title %} Email Schedules {% endblock %}
+
+{% block email_configuration_content %}
+    <div class="p-4">
+        <a href="{% url 'settings_email_configuration_email_schedules_create' %}" class="btn btn-primary btn-sm mb-2">Create</a>
+        {% render_table table 'django_tables2/bootstrap.html' %}
+    </div>
+{% endblock email_configuration_content %}

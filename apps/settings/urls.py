@@ -19,6 +19,9 @@ urlpatterns = [
     path('email-configuration/email-templates/', views.EmailTemplateListView.as_view(), name='settings_email_configuration_email_templates'),
     path('email-configuration/email-templates/<int:pk>/edit/', views.settings_email_configuration_email_templates_edit_view, name='settings_email_configuration_email_templates_edit'),
     path('email-configuration/email-templates/create/', views.settings_email_configuration_email_templates_create, name='settings_email_configuration_email_templates_create'),
+     path('email-configuration/email-schedules/', views.EmailScheduleListView.as_view(), name='settings_email_configuration_email_schedules'),
+    path('email-configuration/email-schedules/<int:pk>/edit/', views.settings_email_configuration_email_schedules_edit_view, name='settings_email_configuration_email_schedules_edit'),
+    path('email-configuration/email-schedules/create/', views.settings_email_configuration_email_schedules_create, name='settings_email_configuration_email_schedules_create'),
     path('system-notifications/', views.settings_system_notifications_view,
          name='settings_system_notifications'),
 ]
