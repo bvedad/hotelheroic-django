@@ -4,12 +4,13 @@ from django_tables2 import SingleTableView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.app.models import EmailTemplate, EmailSchedule
+from apps.item.models import ItemCategory
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
-    RoomTypeForm
+    RoomTypeForm, ItemCategoryForm
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
-    RoomTypeTable
+    RoomTypeTable, ItemCategoryTable
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -233,3 +234,39 @@ def settings_room_type_create_view(request):
         form = RoomTypeForm()
     context = {'form': form}
     return render(request, 'home/settings/property-details/room-type/create.html', context)
+
+
+class ItemCategoryListView(LoginRequiredMixin, SingleTableView):
+    model = ItemCategory
+    table_class = ItemCategoryTable
+    template_name = 'home/settings/property-configuration/item-category/index.html'
+
+
+@login_required
+def settings_item_category_edit_view(request, pk):
+    item_category = get_object_or_404(ItemCategory, pk=pk)
+
+    if request.method == 'POST':
+        form = ItemCategoryForm(request.POST, instance=item_category)
+        if form.is_valid():
+            form.save()
+        return redirect(
+            'settings_item_category_index')
+    else:
+        # Render the edit form
+        form = ItemCategoryForm(instance=item_category)
+        context = {'form': form}
+        return render(request, 'home/settings/property-configuration/item-category/edit.html', context)
+
+
+@login_required
+def settings_item_category_create_view(request):
+    if request.method == 'POST':
+        form = ItemCategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_item_category_index')
+    else:
+        form = ItemCategoryForm()
+    context = {'form': form}
+    return render(request, 'home/settings/property-configuration/item-category/create.html', context)

@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 from apps.app.models import EmailTemplate, EmailSchedule
+from apps.item.models import ItemCategory
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.taxesandfees.models import TaxAndFee
@@ -27,6 +28,7 @@ class EmailScheduleTable(tables.Table):
         model = EmailSchedule
         fields = ('schedule_name', 'email_template')
 
+
 class TaxAndFeeTable(tables.Table):
     def render_name(self, value, record):
         edit_url = reverse('settings_taxes_and_fees_edit', args=[record.pk])
@@ -35,6 +37,7 @@ class TaxAndFeeTable(tables.Table):
     class Meta:
         model = TaxAndFee
         fields = ('name', 'inclusive_or_exclusive', 'amount')
+
 
 class ReservationSourceTable(tables.Table):
     def render_source_name(self, value, record):
@@ -54,3 +57,17 @@ class RoomTypeTable(tables.Table):
     class Meta:
         model = RoomType
         fields = ('room_type_name', 'is_private', 'max_guests', 'room_type_features')
+
+
+class ItemCategoryTable(tables.Table):
+    def render_category_name(self, value, record):
+        edit_url = reverse('settings_item_category_edit', args=[record.pk])
+        return format_html('<a href="{}">{}</a>', edit_url, value)
+
+    class Meta:
+        model = ItemCategory
+        fields = (
+            'category_name',
+            'category_code',
+            'category_color',
+        )
