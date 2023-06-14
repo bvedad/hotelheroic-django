@@ -4,6 +4,7 @@ from django.utils.html import format_html
 
 from apps.app.models import EmailTemplate, EmailSchedule
 from apps.reservation.models import ReservationSource
+from apps.room.models import RoomType
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -43,3 +44,13 @@ class ReservationSourceTable(tables.Table):
     class Meta:
         model = ReservationSource
         fields = ('source_name', 'is_third_party', 'status')
+
+
+class RoomTypeTable(tables.Table):
+    def render_room_type_name(self, value, record):
+        edit_url = reverse('settings_room_type_edit', args=[record.pk])
+        return format_html('<a href="{}">{}</a>', edit_url, value)
+
+    class Meta:
+        model = RoomType
+        fields = ('room_type_name', 'is_private', 'max_guests', 'room_type_features')
