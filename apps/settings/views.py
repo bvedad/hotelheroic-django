@@ -1,7 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
+from django_tables2 import SingleTableView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from apps.settings.forms import HotelForm
+from apps.app.models import EmailTemplate
+from apps.settings.forms import HotelForm, EmailTemplateForm
+from apps.settings.tables import EmailTemplateTable
 
 
 @login_required
@@ -43,9 +47,47 @@ def settings_channel_distribution_view(request):
 
 @login_required
 def settings_email_configuration_view(request):
-    return render(request, 'home/settings/email-configuration.html')
+    return redirect('settings_email_configuration_email_templates')
+
+
+@login_required
+def settings_email_configuration_email_templates_view(request):
+    return render(request, 'home/settings/email-configuration/email-templates.html')
+
+
+@login_required
+def settings_email_configuration_email_templates_edit_view(request, pk):
+    email_template = get_object_or_404(EmailTemplate, pk=pk)
+
+    if request.method == 'POST':
+        return redirect(
+            'settings_email_configuration_email_templates')  # Replace 'roomtype_list' with the actual URL name for the room type list view
+    else:
+        # Render the edit form
+        form = EmailTemplateForm(instance=email_template)
+        context = {'form': form}
+        return render(request, 'home/settings/email-configuration/email-template-edit.html', context)
 
 
 @login_required
 def settings_system_notifications_view(request):
     return render(request, 'home/settings/system-notifications.html')
+
+
+class EmailTemplateListView(LoginRequiredMixin, SingleTableView):
+    model = EmailTemplate
+    table_class = EmailTemplateTable
+    template_name = 'home/settings/email-configuration/email-templates.html'
+
+
+@login_required
+def settings_email_configuration_email_templates_create(request):
+    if request.method == 'POST':
+        form = EmailTemplateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_email_configuration_email_templates')
+    else:
+        form = EmailTemplateForm()
+        context = {'form': form}
+        return render(request, 'home/settings/email-configuration/email-template-create.html', context)

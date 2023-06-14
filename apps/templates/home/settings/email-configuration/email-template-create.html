@@ -1,0 +1,13 @@
+{% extends "home/settings/email-configuration/_base_email_configuration.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Email Templates - Create {% endblock %}
+
+{% block email_configuration_content %}
+    <div class="p-4">
+        <form method="post" action="{% url 'settings_email_configuration_email_templates_create' %}">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
+    </div>
+{% endblock email_configuration_content %}

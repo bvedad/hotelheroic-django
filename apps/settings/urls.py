@@ -16,6 +16,9 @@ urlpatterns = [
     path('channel-distribution/', views.settings_channel_distribution_view,
          name='settings_channel_distribution'),
     path('email-configuration/', views.settings_email_configuration_view, name='settings_email_configuration'),
+    path('email-configuration/email-templates/', views.EmailTemplateListView.as_view(), name='settings_email_configuration_email_templates'),
+    path('email-configuration/email-templates/<int:pk>/edit/', views.settings_email_configuration_email_templates_edit_view, name='settings_email_configuration_email_templates_edit'),
+    path('email-configuration/email-templates/create/', views.settings_email_configuration_email_templates_create, name='settings_email_configuration_email_templates_create'),
     path('system-notifications/', views.settings_system_notifications_view,
          name='settings_system_notifications'),
 ]
