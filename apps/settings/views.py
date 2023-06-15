@@ -3,14 +3,14 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django_tables2 import SingleTableView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from apps.app.models import EmailTemplate, EmailSchedule
+from apps.app.models import EmailTemplate, EmailSchedule, CustomField
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
-    RoomTypeForm, ItemCategoryForm, ItemForm
+    RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
-    RoomTypeTable, ItemCategoryTable, ItemTable
+    RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -306,3 +306,39 @@ def settings_item_create_view(request):
         form = ItemForm()
     context = {'form': form}
     return render(request, 'home/settings/property-configuration/item/create.html', context)
+
+
+class CustomFieldListView(LoginRequiredMixin, SingleTableView):
+    model = CustomField
+    table_class = CustomFieldTable
+    template_name = 'home/settings/property-configuration/custom-field/index.html'
+
+
+@login_required
+def settings_custom_field_edit_view(request, pk):
+    item = get_object_or_404(CustomField, pk=pk)
+
+    if request.method == 'POST':
+        form = CustomFieldForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+        return redirect(
+            'settings_custom_field_index')
+    else:
+        # Render the edit form
+        form = CustomFieldForm(instance=item)
+        context = {'form': form}
+        return render(request, 'home/settings/property-configuration/custom-field/edit.html', context)
+
+
+@login_required
+def settings_custom_field_create_view(request):
+    if request.method == 'POST':
+        form = CustomFieldForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_custom_field_index')
+    else:
+        form = CustomFieldForm()
+    context = {'form': form}
+    return render(request, 'home/settings/property-configuration/custom-field/create.html', context)

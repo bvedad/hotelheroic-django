@@ -2,7 +2,7 @@ import django_tables2 as tables
 from django.urls import reverse
 from django.utils.html import format_html
 
-from apps.app.models import EmailTemplate, EmailSchedule
+from apps.app.models import EmailTemplate, EmailSchedule, CustomField
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
@@ -75,9 +75,18 @@ class ItemCategoryTable(tables.Table):
 
 class ItemTable(tables.Table):
     def render_name(self, value, record):
-        edit_url = reverse('settings_item_category_edit', args=[record.pk])
+        edit_url = reverse('settings_item_edit', args=[record.pk])
         return format_html('<a href="{}">{}</a>', edit_url, value)
 
     class Meta:
         model = Item
         fields = ('sku', 'name', 'item_type', 'description', 'price')
+
+class CustomFieldTable(tables.Table):
+    def render_name(self, value, record):
+        edit_url = reverse('settings_custom_field_edit', args=[record.pk])
+        return format_html('<a href="{}">{}</a>', edit_url, value)
+
+    class Meta:
+        model = CustomField
+        fields = ('name', 'type', 'required', 'apply_to')

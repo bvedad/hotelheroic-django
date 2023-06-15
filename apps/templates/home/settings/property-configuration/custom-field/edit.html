@@ -1,0 +1,13 @@
+{% extends "home/settings/property-configuration/_base_property_configuration.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Custom Fields - Edit {% endblock %}
+
+{% block property_configuration_content %}
+    <div class="p-4">
+        <form method="post">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
+    </div>
+{% endblock property_configuration_content %}

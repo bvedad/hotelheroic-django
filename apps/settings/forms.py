@@ -2,7 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, HTML, Submit, Button
 
-from apps.app.models import EmailTemplate, EmailSchedule
+from apps.app.models import EmailTemplate, EmailSchedule, CustomField
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
@@ -153,6 +153,20 @@ class ItemCategoryForm(forms.ModelForm):
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
+        self.helper.add_input(
+            Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back();"))
+
+
+class CustomFieldForm(forms.ModelForm):
+    class Meta:
+        model = CustomField
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
