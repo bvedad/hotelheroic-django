@@ -8,7 +8,8 @@ from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
-    RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm
+    RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet
+from apps.settings.models import Hotel
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable
 from apps.taxesandfees.models import TaxAndFee
@@ -21,9 +22,21 @@ def settings_property_details_view(request):
 
 @login_required
 def settings_property_details_property_profile_view(request):
-    form = HotelForm()
-    context = {'form': form}
-    return render(request, 'home/settings/property-details/property-profile.html', context)
+    hotel = Hotel.objects.first()
+    if request.method == 'POST':
+        hotel_form = HotelForm(request.POST, instance=hotel)
+        photo_formset = HotelPhotoFormSet(request.POST, request.FILES, instance=hotel)
+        if hotel_form.is_valid() and photo_formset.is_valid():
+            hotel = hotel_form.save()
+            photo_formset.save()
+            photo_formset = HotelPhotoFormSet(instance=hotel)
+    else:
+        hotel_form = HotelForm(instance=hotel)
+        photo_formset = HotelPhotoFormSet(instance=hotel)
+    return render(request, 'home/settings/property-details/property-profile.html',
+                  {'form': hotel_form
+                      , 'photo_formset': photo_formset
+                   })
 
 
 @login_required

@@ -194,3 +194,6 @@ MESSAGE_TAGS = {
 }
 
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap5-responsive.html"
+
+MEDIA_ROOT = os.path.join(CORE_DIR, 'media/')
+MEDIA_URL = '/media/'
