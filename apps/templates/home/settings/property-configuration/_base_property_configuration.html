@@ -28,6 +28,10 @@
                 <a class="nav-link mb-sm-3 mb-md-0 {% if '/custom-fields' in request.path %} active {% endif %}"
                    href="{% url 'settings_custom_field_index' %}">Custom Fields</a>
             </li>
+            <li class="nav-item flex-grow-0">
+                <a class="nav-link mb-sm-3 mb-md-0 {% if '/guest-statuses' in request.path %} active {% endif %}"
+                   href="{% url 'settings_guest_status_index' %}">Guest Statuses</a>
+            </li>
         </ul>
     </div>
 

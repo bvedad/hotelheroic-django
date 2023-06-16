@@ -8,10 +8,10 @@ from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
-    RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet
-from apps.settings.models import Hotel
+    RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm
+from apps.settings.models import Hotel, GuestStatus
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
-    RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable
+    RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -355,3 +355,38 @@ def settings_custom_field_create_view(request):
         form = CustomFieldForm()
     context = {'form': form}
     return render(request, 'home/settings/property-configuration/custom-field/create.html', context)
+
+
+class GuestStatusListView(LoginRequiredMixin, SingleTableView):
+    model = GuestStatus
+    table_class = GuestStatusTable
+    template_name = 'home/settings/property-configuration/guest-status/index.html'
+
+
+@login_required
+def settings_guest_status_edit_view(request, pk):
+    item = get_object_or_404(GuestStatus, pk=pk)
+
+    if request.method == 'POST':
+        form = GuestStatusForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+        return redirect(
+            'settings_guest_status_index')
+    else:
+        form = GuestStatusForm(instance=item)
+        context = {'form': form}
+        return render(request, 'home/settings/property-configuration/guest-status/edit.html', context)
+
+
+@login_required
+def settings_guest_status_create_view(request):
+    if request.method == 'POST':
+        form = GuestStatusForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_guest_status_index')
+    else:
+        form = GuestStatusForm()
+    context = {'form': form}
+    return render(request, 'home/settings/property-configuration/guest-status/create.html', context)

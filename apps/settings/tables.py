@@ -6,6 +6,7 @@ from apps.app.models import EmailTemplate, EmailSchedule, CustomField
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
+from apps.settings.models import GuestStatus
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -82,6 +83,7 @@ class ItemTable(tables.Table):
         model = Item
         fields = ('sku', 'name', 'item_type', 'description', 'price')
 
+
 class CustomFieldTable(tables.Table):
     def render_name(self, value, record):
         edit_url = reverse('settings_custom_field_edit', args=[record.pk])
@@ -90,3 +92,13 @@ class CustomFieldTable(tables.Table):
     class Meta:
         model = CustomField
         fields = ('name', 'type', 'required', 'apply_to')
+
+
+class GuestStatusTable(tables.Table):
+    def render_name(self, value, record):
+        edit_url = reverse('settings_guest_status_edit', args=[record.pk])
+        return format_html('<a href="{}">{}</a>', edit_url, value)
+
+    class Meta:
+        model = GuestStatus
+        fields = ('is_active', 'name', 'description')
