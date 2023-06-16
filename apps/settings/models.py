@@ -48,3 +48,13 @@ class Hotel(models.Model):
 class HotelPhoto(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='hotel_photos')
     photo = models.ImageField(upload_to='hotel_photos')
+
+
+class GuestStatus(models.Model):
+    name = models.CharField(max_length=255, help_text='Guest status')
+    description = models.TextField(help_text='Guest status description')
+    guests = models.ManyToManyField('app.Guest', blank=True)
+    is_active = models.BooleanField(default=True, help_text='Guest status is active')
+
+    def __str__(self):
+        return self.name

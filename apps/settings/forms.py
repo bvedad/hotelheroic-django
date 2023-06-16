@@ -7,7 +7,7 @@ from apps.app.models import EmailTemplate, EmailSchedule, CustomField
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
-from apps.settings.models import Hotel, HotelPhoto
+from apps.settings.models import Hotel, HotelPhoto, GuestStatus
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -177,6 +177,20 @@ class ItemForm(forms.ModelForm):
 class CustomFieldForm(forms.ModelForm):
     class Meta:
         model = CustomField
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
+        self.helper.add_input(
+            Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back();"))
+
+
+class GuestStatusForm(forms.ModelForm):
+    class Meta:
+        model = GuestStatus
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
