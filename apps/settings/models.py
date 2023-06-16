@@ -16,7 +16,6 @@ class Hotel(models.Model):
     ]
     property_name = models.CharField(max_length=255, help_text='Property name')
     property_type = models.CharField(max_length=50, choices=PROPERTY_TYPE_CHOICES, help_text='Property type')
-    property_image = models.ImageField(upload_to='property_images')
     property_description = models.TextField(help_text='Property description')
     property_primary_language = models.CharField(max_length=255, help_text='Property primary language')
     property_phone = models.CharField(max_length=20, help_text='Property phone number')
@@ -44,3 +43,8 @@ class Hotel(models.Model):
 
     def __str__(self):
         return self.property_name
+
+
+class HotelPhoto(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='hotel_photos')
+    photo = models.ImageField(upload_to='hotel_photos')

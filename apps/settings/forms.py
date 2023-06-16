@@ -1,13 +1,24 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, HTML, Submit, Button
+from django.forms import inlineformset_factory, formset_factory
 
 from apps.app.models import EmailTemplate, EmailSchedule, CustomField
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
-from apps.settings.models import Hotel
+from apps.settings.models import Hotel, HotelPhoto
 from apps.taxesandfees.models import TaxAndFee
+
+HotelPhotoFormSet = inlineformset_factory(
+    Hotel,
+    HotelPhoto,
+    fields=('photo',),
+    extra=8,
+    can_delete=True,
+    max_num=8,
+    labels={'photo': ''}
+)
 
 
 class HotelForm(forms.ModelForm):
@@ -18,6 +29,7 @@ class HotelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.form_tag = False
         self.helper.layout = Layout(
             Fieldset(
                 'Property Information',
@@ -25,7 +37,6 @@ class HotelForm(forms.ModelForm):
                     Div('property_name', css_class='col-md-6'),
                     Div('property_type', css_class='col-md-6'),
                     Div('property_description', css_class='col-md-12'),
-                    Div('property_image', css_class='col-md-6'),
                     Div('property_primary_language', css_class='col-md-6'),
                     Div('property_phone', css_class='col-md-6'),
                     Div('property_email', css_class='col-md-6'),
@@ -59,7 +70,6 @@ class HotelForm(forms.ModelForm):
                     css_class='row'
                 ),
             ),
-            HTML('<button class="btn btn-primary" type="submit">Save</button>')
         )
 
 
