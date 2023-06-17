@@ -32,6 +32,10 @@
                 <a class="nav-link mb-sm-3 mb-md-0 {% if '/guest-statuses' in request.path %} active {% endif %}"
                    href="{% url 'settings_guest_status_index' %}">Guest Statuses</a>
             </li>
+            <li class="nav-item flex-grow-0">
+                <a class="nav-link mb-sm-3 mb-md-0 {% if '/add-ons' in request.path %} active {% endif %}"
+                   href="{% url 'settings_addon_index' %}">Add Ons</a>
+            </li>
         </ul>
     </div>
 
