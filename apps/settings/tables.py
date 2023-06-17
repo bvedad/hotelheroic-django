@@ -2,7 +2,7 @@ import django_tables2 as tables
 from django.urls import reverse
 from django.utils.html import format_html
 
-from apps.app.models import EmailTemplate, EmailSchedule, CustomField
+from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmenity
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
@@ -102,3 +102,12 @@ class GuestStatusTable(tables.Table):
     class Meta:
         model = GuestStatus
         fields = ('is_active', 'name', 'description')
+
+class HotelAmenityTable(tables.Table):
+    def render_name(self, value, record):
+        edit_url = reverse('settings_hotel_amenity_edit', args=[record.pk])
+        return format_html('<a href="{}">{}</a>', edit_url, value)
+
+    class Meta:
+        model = HotelAmenity
+        fields = ('is_active', 'name', 'category')

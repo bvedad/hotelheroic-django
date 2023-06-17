@@ -3,15 +3,15 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django_tables2 import SingleTableView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from apps.app.models import EmailTemplate, EmailSchedule, CustomField
+from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmenity
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
-    RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm
+    RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm
 from apps.settings.models import Hotel, GuestStatus
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
-    RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable
+    RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -37,11 +37,6 @@ def settings_property_details_property_profile_view(request):
                   {'form': hotel_form
                       , 'photo_formset': photo_formset
                    })
-
-
-@login_required
-def settings_property_details_property_amenities_view(request):
-    return render(request, 'home/settings/property-details/property-amenities.html')
 
 
 @login_required
@@ -389,4 +384,39 @@ def settings_guest_status_create_view(request):
     else:
         form = GuestStatusForm()
     context = {'form': form}
-    return render(request, 'home/settings/property-configuration/guest-status/create.html', context)
+    return render(request, 'home/settings/property-details/hotel-amenity/create.html', context)
+
+
+class HotelAmenityListView(LoginRequiredMixin, SingleTableView):
+    model = HotelAmenity
+    table_class = HotelAmenityTable
+    template_name = 'home/settings/property-details/hotel-amenity/index.html'
+
+
+@login_required
+def settings_hotel_amenity_edit_view(request, pk):
+    item = get_object_or_404(HotelAmenity, pk=pk)
+
+    if request.method == 'POST':
+        form = HotelAmenityForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+        return redirect(
+            'settings_hotel_amenity_index')
+    else:
+        form = HotelAmenityForm(instance=item)
+        context = {'form': form}
+        return render(request, 'home/settings/property-details/hotel-amenity/edit.html', context)
+
+
+@login_required
+def settings_hotel_amenity_create_view(request):
+    if request.method == 'POST':
+        form = HotelAmenityForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_hotel_amenity_index')
+    else:
+        form = HotelAmenityForm()
+    context = {'form': form}
+    return render(request, 'home/settings/property-details/hotel-amenity/create.html', context)
