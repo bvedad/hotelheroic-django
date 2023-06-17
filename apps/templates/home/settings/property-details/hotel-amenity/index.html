@@ -1,0 +1,12 @@
+{% extends "home/settings/property-details/_base_property_details.html" %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+{% block title %} Hotel Amenities {% endblock %}
+
+{% block property_details_content %}
+    <div class="p-4">
+        <a href="{% url 'settings_hotel_amenity_create' %}" class="btn btn-primary btn-sm mb-2">Create</a>
+        {% render_table table 'django_tables2/bootstrap.html' %}
+    </div>
+{% endblock property_details_content %}

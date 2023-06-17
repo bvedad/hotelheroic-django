@@ -236,6 +236,7 @@ class HotelAmenity(models.Model):
     name = models.CharField(max_length=255, help_text='Amenity name')
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, help_text='Amenity category')
     hotel = models.ForeignKey('settings.Hotel', on_delete=models.CASCADE, related_name='amenities')
+    is_active = models.BooleanField(default=True, help_text='Whether amenity is active or not')
 
     def __str__(self):
         return self.name
