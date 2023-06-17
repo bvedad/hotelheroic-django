@@ -1,5 +1,8 @@
 from django.db import models
 
+from apps.item.models import Item
+from apps.room.models import RoomType
+
 
 class Hotel(models.Model):
     PROPERTY_TYPE_CHOICES = [
@@ -58,3 +61,78 @@ class GuestStatus(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class AddOn(models.Model):
+    name = models.CharField(max_length=255, help_text='This will be displayed on the booking engine mybookings')
+    inventory_item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    CHARGE_TYPES = [
+        ('reservation', 'Per Reservation'),
+        ('night', 'Per Night'),
+        ('room_bed', 'Per Room/Bed'),
+        ('room_bed_night', 'Per Room/Bed Per Night'),
+        ('guest', 'Per Guest'),
+        ('guest_night', 'Per Guest Per Night'),
+        ('quantity', 'Per Quantity'),
+    ]
+    charge_type = models.CharField(max_length=20, choices=CHARGE_TYPES, help_text='Select the type of charge')
+    transaction_code = models.CharField(max_length=255, blank=True, null=True,
+                                        help_text='Internal transaction code (optional)')
+    availability_choices = [
+        ('arrival', 'Arrival'),
+        ('departure', 'Departure'),
+        ('both', 'Both Arrival and Departure'),
+        ('na', 'Not Applicable'),
+    ]
+    availability = models.CharField(max_length=20, choices=availability_choices,
+                                    help_text='Select when the add-on will be available')
+    post_choices = [
+        ('immediate', 'Immediately when receiving the reservation'),
+        ('checkin', 'When checking-in the reservation'),
+        ('daily', 'Post Add-On daily'),
+    ]
+    post_transaction = models.CharField(max_length=20, choices=post_choices,
+                                        help_text='Select when the transaction should be posted')
+    keep_posted_on_cancellation = models.BooleanField(default=True,
+                                                      help_text='Choose whether to keep or void the transaction on cancellation/no show')
+    calculate_revenue_choices = [
+        ('proportional', 'Adjust its price proportionally to the other package inclusions'),
+        ('full_price', 'Calculate based on the full price'),
+    ]
+    calculate_revenue = models.CharField(max_length=20, choices=calculate_revenue_choices,
+                                         help_text='Choose how add-on values will be calculated for revenue allocation')
+    image = models.ImageField(upload_to='add_ons', null=True, blank=True,
+                              help_text='Upload an image (recommended: 150px x 75px)')
+
+    def __str__(self):
+        return self.name
+
+
+class AddOnInterval(models.Model):
+    add_on = models.ForeignKey(AddOn, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, help_text='Interval name (internal only)')
+    start_date = models.DateField(help_text='Set the start date of the interval')
+    end_date = models.DateField(help_text='Set the end date of the interval')
+    min_overlap = models.PositiveIntegerField(
+        help_text='Set the minimum number of consecutive reservation days the add-on must be available')
+    max_overlap = models.PositiveIntegerField(
+        help_text='Set the maximum number of consecutive reservation days the add-on must be available')
+    room_types = models.ManyToManyField(RoomType,
+                                        help_text='Select the room types for which this add-on will be available')
+    monday_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                       help_text='Enter the price for Monday')
+    tuesday_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                        help_text='Enter the price for Tuesday')
+    wednesday_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                          help_text='Enter the price for Wednesday')
+    thursday_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                         help_text='Enter the price for Thursday')
+    friday_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                       help_text='Enter the price for Friday')
+    saturday_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                         help_text='Enter the price for Saturday')
+    sunday_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                       help_text='Enter the price for Sunday')
+
+    def __str__(self):
+        return f"Interval for {self.add_on.name}"

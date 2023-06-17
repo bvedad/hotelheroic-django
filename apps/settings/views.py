@@ -8,10 +8,12 @@ from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
-    RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm
-from apps.settings.models import Hotel, GuestStatus
+    RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
+    AddOnForm, AddOnIntervalForm
+from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
-    RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable
+    RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
+    AddOnIntervalTable
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -420,3 +422,72 @@ def settings_hotel_amenity_create_view(request):
         form = HotelAmenityForm()
     context = {'form': form}
     return render(request, 'home/settings/property-details/hotel-amenity/create.html', context)
+
+
+class AddOnListView(LoginRequiredMixin, SingleTableView):
+    model = AddOn
+    table_class = AddOnTable
+    template_name = 'home/settings/property-configuration/addon/index.html'
+
+
+@login_required
+def settings_addon_edit_view(request, pk):
+    item = get_object_or_404(AddOn, pk=pk)
+
+    if request.method == 'POST':
+        form = AddOnForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+        return redirect(
+            'settings_addon_index')
+    else:
+        form = AddOnForm(instance=item)
+        table = AddOnIntervalTable(AddOnInterval.objects.filter(add_on=item))
+        context = {'form': form, 'table': table}
+        return render(request, 'home/settings/property-configuration/addon/edit.html', context)
+
+
+@login_required
+def settings_addon_create_view(request):
+    if request.method == 'POST':
+        form = AddOnForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_addon_index')
+    else:
+        form = AddOnForm()
+    context = {'form': form}
+    return render(request, 'home/settings/property-configuration/addon/create.html', context)
+
+
+@login_required
+def settings_addon_interval_edit_view(request, pk):
+    item = get_object_or_404(AddOnInterval, pk=pk)
+
+    if request.method == 'POST':
+        form = AddOnIntervalForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+        return redirect(
+            'settings_addon_edit', pk=item.add_on.pk)
+    else:
+        form = AddOnIntervalForm(instance=item)
+        context = {'form': form}
+        return render(request, 'home/settings/property-configuration/addon-interval/edit.html', context)
+
+
+@login_required
+def settings_addon_interval_create_view(request):
+    if request.method == 'POST':
+        form = AddOnIntervalForm(request.POST)
+        add_on = get_object_or_404(AddOn, pk=request.POST.get('add_on'))
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.add_on = add_on
+            instance.save()
+            return redirect('settings_addon_interval_edit', pk=add_on.pk)
+    else:
+        add_on = get_object_or_404(AddOn, pk=request.GET.get('add_on'))
+        form = AddOnIntervalForm(initial={'add_on': add_on})
+    context = {'form': form}
+    return render(request, 'home/settings/property-configuration/addon-interval/create.html', context)

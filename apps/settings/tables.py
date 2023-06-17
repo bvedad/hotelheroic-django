@@ -6,7 +6,7 @@ from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmen
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
-from apps.settings.models import GuestStatus
+from apps.settings.models import GuestStatus, AddOn, AddOnInterval
 from apps.taxesandfees.models import TaxAndFee
 
 
@@ -103,6 +103,7 @@ class GuestStatusTable(tables.Table):
         model = GuestStatus
         fields = ('is_active', 'name', 'description')
 
+
 class HotelAmenityTable(tables.Table):
     def render_name(self, value, record):
         edit_url = reverse('settings_hotel_amenity_edit', args=[record.pk])
@@ -111,3 +112,23 @@ class HotelAmenityTable(tables.Table):
     class Meta:
         model = HotelAmenity
         fields = ('is_active', 'name', 'category')
+
+
+class AddOnTable(tables.Table):
+    def render_name(self, value, record):
+        edit_url = reverse('settings_addon_edit', args=[record.pk])
+        return format_html('<a href="{}">{}</a>', edit_url, value)
+
+    class Meta:
+        model = AddOn
+        fields = ("name", "inventory_item")
+
+
+class AddOnIntervalTable(tables.Table):
+    def render_name(self, value, record):
+        edit_url = reverse('settings_addon_interval_edit', args=[record.pk])
+        return format_html('<a href="{}">{}</a>', edit_url, value)
+
+    class Meta:
+        model = AddOnInterval
+        fields = ("name", "start_date", "end_date", "room_types")

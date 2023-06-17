@@ -7,7 +7,7 @@ from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmen
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
-from apps.settings.models import Hotel, HotelPhoto, GuestStatus
+from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -201,10 +201,44 @@ class GuestStatusForm(forms.ModelForm):
         self.helper.add_input(
             Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back();"))
 
+
 class HotelAmenityForm(forms.ModelForm):
     class Meta:
         model = HotelAmenity
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
+        self.helper.add_input(
+            Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back();"))
+
+
+class AddOnForm(forms.ModelForm):
+    class Meta:
+        model = AddOn
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
+        self.helper.add_input(
+            Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back();"))
+
+
+class AddOnIntervalForm(forms.ModelForm):
+    class Meta:
+        model = AddOnInterval
+        fields = '__all__'
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'})
+        }
+        exclude = ['add_on']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

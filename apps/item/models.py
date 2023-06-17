@@ -32,6 +32,9 @@ class Item(models.Model):
                                                      help_text='Item price subtracting the included taxes')
     grand_total = models.FloatField(blank=True, null=True, help_text='Item price with fees and taxes')
 
+    def __str__(self):
+        return self.name
+
 
 class ItemCategory(models.Model):
     category_name = models.CharField(max_length=255, help_text='Category name')
