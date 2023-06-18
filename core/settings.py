@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'ckeditor',
     'crispy_forms',
     "crispy_bootstrap5",
     "django_tables2",
@@ -197,3 +198,6 @@ DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap5-responsive.html"
 
 MEDIA_ROOT = os.path.join(CORE_DIR, 'media/')
 MEDIA_URL = '/media/'
+
+CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
+CKEDITOR_UPLOAD_PATH = "uploads/"

@@ -9,8 +9,9 @@ from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
-    AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm
-from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy
+    AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm
+from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
+    TermsAndConditions
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
     AddOnIntervalTable
@@ -521,5 +522,21 @@ def settings_property_configuration_deposit_policy_edit_view(request):
     else:
         form = DepositPolicyForm(instance=deposit_policy)
     return render(request, 'home/settings/property-configuration/system-settings.html',
+                  {'form': form
+                   })
+
+
+@login_required
+def settings_property_configuration_terms_and_conditions_edit_view(request):
+    terms_and_conditions = TermsAndConditions.objects.first()
+    if terms_and_conditions is None:
+        terms_and_conditions = TermsAndConditions.objects.create()
+    if request.method == 'POST':
+        form = TermsAndConditionsForm(request.POST, instance=terms_and_conditions)
+        if form.is_valid():
+            form.save()
+    else:
+        form = TermsAndConditionsForm(instance=terms_and_conditions)
+    return render(request, 'home/settings/property-configuration/terms-and-conditions.html',
                   {'form': form
                    })

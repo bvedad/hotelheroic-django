@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
 from django.db import models
 from timezone_field import TimeZoneField
@@ -332,3 +333,22 @@ class DepositPolicy(models.Model):
             raise ValidationError({'deposit_percentage': 'This field is required for percentage deposit type.'})
         elif self.deposit_type == 'fixed_amount' and not self.deposit_fixed_amount:
             raise ValidationError({'deposit_fixed_amount': 'This field is required for fixed amount deposit type.'})
+
+
+class TermsAndConditions(models.Model):
+    language = models.CharField(
+        max_length=2,
+        choices=SystemSettings.APPLICATION_LANGUAGES,
+        default='en',
+        help_text='Choose the language for your terms and conditions.',
+    )
+
+    content = RichTextField(
+        help_text='Enter your terms and conditions. Apply format if needed.',
+    )
+
+    class Meta:
+        verbose_name_plural = 'Terms and Conditions'
+
+    def __str__(self):
+        return self.language
