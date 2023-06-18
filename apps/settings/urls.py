@@ -92,6 +92,6 @@ urlpatterns = [
          name='settings_addon_interval_edit'),
     path('property-configuration/add-on-intervals/create/', views.settings_addon_interval_create_view,
          name='settings_addon_interval_create'),
-    path('system-notifications/', views.settings_system_notifications_view,
-         name='settings_system_notifications'),
+    path('system-notifications/', views.settings_system_notifications_edit_view,
+         name='settings_system_notifications_edit'),
 ]

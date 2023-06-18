@@ -1,14 +1,14 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, Div, Submit, Button
-from django.forms import inlineformset_factory
+from crispy_forms.layout import Layout, Fieldset, Div, Submit, Button, Field, HTML
+from django.forms import inlineformset_factory, formset_factory, BaseModelFormSet, modelformset_factory
 
 from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmenity
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
-    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings
+    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, SystemNotification
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -415,3 +415,34 @@ class InvoiceSettingsForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
+
+
+class SystemNotificationForm(forms.ModelForm):
+    notification_type = forms.ChoiceField(choices=SystemNotification.NOTIFICATION_CHOICES, disabled=True)
+
+    class Meta:
+        model = SystemNotification
+        fields = ('notification_type', 'is_active', 'recipients',)
+        widgets = {
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+        help_texts = {
+            'notification_type': '',
+        }
+
+
+SystemNotificationFormSet = modelformset_factory(SystemNotification, SystemNotificationForm, extra=0,
+                                                 fields=('notification_type', 'is_active', 'recipients',))
+
+
+def generate_formset():
+    system_notifications = SystemNotification.objects.filter()
+
+    formset = SystemNotificationFormSet(queryset=system_notifications)
+
+    helper = FormHelper()
+    helper.template = 'bootstrap5/table_inline_formset.html'
+    helper.form_method = 'post'
+    helper.add_input(Submit('submit', 'Save'))
+
+    return formset, helper
