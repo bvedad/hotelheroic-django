@@ -10,7 +10,8 @@ from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
     AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, \
-    ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm
+    ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm, SystemNotificationForm, \
+    generate_formset, SystemNotificationFormSet
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
@@ -78,11 +79,6 @@ def settings_email_configuration_email_templates_edit_view(request, pk):
         form = EmailTemplateForm(instance=email_template)
         context = {'form': form}
         return render(request, 'home/settings/email-configuration/email-template-edit.html', context)
-
-
-@login_required
-def settings_system_notifications_view(request):
-    return render(request, 'home/settings/system-notifications.html')
 
 
 class EmailTemplateListView(LoginRequiredMixin, SingleTableView):
@@ -605,3 +601,19 @@ def settings_property_configuration_invoicing_settings_edit_view(request):
     return render(request, 'home/settings/property-configuration/arrival-and-departure.html',
                   {'form': form
                    })
+
+
+@login_required
+def settings_system_notifications_edit_view(request):
+    formset, helper = generate_formset()
+
+    if request.method == 'POST':
+        formset = SystemNotificationFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+
+    context = {
+        'formset': formset,
+        'helper': helper,
+    }
+    return render(request, 'home/settings/system-notifications.html', context)

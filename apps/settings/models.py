@@ -1,4 +1,5 @@
 from ckeditor.fields import RichTextField
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from timezone_field import TimeZoneField
@@ -487,3 +488,44 @@ class InvoiceSettings(models.Model):
         default=False,
         help_text='Consolidate common transactions into their own line on the invoice.',
     )
+
+User = get_user_model()
+
+
+class SystemNotification(models.Model):
+    NOTIFICATION_CHOICES = [
+        ('new_reservation', 'New Reservation Received'),
+        ('reservation_cancelled', 'Reservation Cancelled'),
+        ('reservation_modified', 'Reservation Modified (modification from OTA)'),
+        ('reservation_unmapped', 'Modification to Reservation with Unmapped Rooms'),
+        ('no_show_reported', 'No Shows Auto-Reported to Booking.com'),
+        ('payment_success', 'Payment processed successfully'),
+        ('payment_failure', 'Unable to process payment'),
+        ('chargeback', 'Chargeback Notifications / Resolutions'),
+        ('drawer_closure', 'Drawer Closure Summary Notifications'),
+    ]
+
+    notification_type = models.CharField(
+        max_length=50,
+        choices=NOTIFICATION_CHOICES,
+        unique=True,
+        help_text='Select the type of system notification.'
+    )
+    recipients = models.ManyToManyField(
+        User,
+        related_name='system_notifications',
+        help_text='Select the recipients for this notification type.',
+        blank=True
+    )
+
+    is_active = models.BooleanField(default=True)
+    hotel = models.ForeignKey(
+        Hotel,
+        on_delete=models.CASCADE,
+        related_name='system_notifications',
+        help_text='Select the hotel for this notification type.'
+    )
+
+    def __str__(self):
+        return dict(self.NOTIFICATION_CHOICES).get(self.notification_type, '')
+
