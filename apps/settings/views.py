@@ -9,9 +9,9 @@ from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
-    AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm
+    AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, ArrivalAndDepartureForm
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
-    TermsAndConditions
+    TermsAndConditions, ArrivalAndDeparture
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
     AddOnIntervalTable
@@ -538,5 +538,21 @@ def settings_property_configuration_terms_and_conditions_edit_view(request):
     else:
         form = TermsAndConditionsForm(instance=terms_and_conditions)
     return render(request, 'home/settings/property-configuration/terms-and-conditions.html',
+                  {'form': form
+                   })
+
+
+@login_required
+def settings_property_configuration_arrival_and_departure_edit_view(request):
+    arrival_and_departure = ArrivalAndDeparture.objects.first()
+    if arrival_and_departure is None:
+        arrival_and_departure = ArrivalAndDeparture()
+    if request.method == 'POST':
+        form = ArrivalAndDepartureForm(request.POST, instance=arrival_and_departure)
+        if form.is_valid():
+            form.save()
+    else:
+        form = ArrivalAndDepartureForm(instance=arrival_and_departure)
+    return render(request, 'home/settings/property-configuration/arrival-and-departure.html',
                   {'form': form
                    })

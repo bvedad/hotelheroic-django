@@ -352,3 +352,32 @@ class TermsAndConditions(models.Model):
 
     def __str__(self):
         return self.language
+
+class ArrivalAndDeparture(models.Model):
+    check_in_time = models.TimeField(help_text='Set the check-in time for your property.')
+    check_out_time = models.TimeField(help_text='Set the check-out time for your property.')
+    late_check_out_allowed = models.BooleanField(default=False, help_text='Specify whether you offer a late check-out option.')
+
+    late_check_out_time = models.TimeField(
+        null=True,
+        blank=True,
+        help_text='Set the preferred late check-out time for guests.'
+    )
+
+    LATE_CHECK_OUT_CHOICES = [
+        ('percentage', 'Percentage'),
+        ('fixed', 'Fixed'),
+    ]
+    late_check_out_charge_type = models.CharField(
+        max_length=10,
+        choices=LATE_CHECK_OUT_CHOICES,
+        blank=True,
+        help_text='Choose the type of charge for late check-out.'
+    )
+
+    late_check_out_charge_amount = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        default=0.00,
+        help_text='Set the amount for the late check-out charge.'
+    )
