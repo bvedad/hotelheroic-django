@@ -10,9 +10,9 @@ from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
     AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, \
-    ArrivalAndDepartureForm, ConfirmationPendingForm
+    ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
-    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending
+    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
     AddOnIntervalTable
@@ -570,6 +570,38 @@ def settings_property_configuration_confirmation_pending_edit_view(request):
             form.save()
     else:
         form = ConfirmationPendingForm(instance=confirmation_pending)
+    return render(request, 'home/settings/property-configuration/arrival-and-departure.html',
+                  {'form': form
+                   })
+
+
+@login_required
+def settings_property_configuration_invoice_details_edit_view(request):
+    invoice_details = InvoiceDetails.objects.first()
+    if invoice_details is None:
+        invoice_details = InvoiceDetails()
+    if request.method == 'POST':
+        form = InvoiceDetailsForm(request.POST, instance=invoice_details)
+        if form.is_valid():
+            form.save()
+    else:
+        form = InvoiceDetailsForm(instance=invoice_details)
+    return render(request, 'home/settings/property-configuration/arrival-and-departure.html',
+                  {'form': form
+                   })
+
+
+@login_required
+def settings_property_configuration_invoicing_settings_edit_view(request):
+    invoicing_settings = InvoiceSettings.objects.first()
+    if invoicing_settings is None:
+        invoicing_settings = InvoiceSettings()
+    if request.method == 'POST':
+        form = InvoiceSettingsForm(request.POST, instance=invoicing_settings)
+        if form.is_valid():
+            form.save()
+    else:
+        form = InvoiceSettingsForm(instance=invoicing_settings)
     return render(request, 'home/settings/property-configuration/arrival-and-departure.html',
                   {'form': form
                    })

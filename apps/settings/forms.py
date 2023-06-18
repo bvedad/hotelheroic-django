@@ -8,7 +8,7 @@ from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
-    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending
+    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -355,6 +355,59 @@ class ArrivalAndDepartureForm(forms.ModelForm):
 class ConfirmationPendingForm(forms.ModelForm):
     class Meta:
         model = ConfirmationPending
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
+
+
+class InvoiceDetailsForm(forms.ModelForm):
+    class Meta:
+        model = InvoiceDetails
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.layout = Layout(
+            Fieldset(
+                'Invoice Logo',
+                'company_logo',
+            ),
+            Fieldset(
+                'Invoice Title And Sequence',
+                'invoice_title',
+                'invoice_prefix',
+                'starting_index_number',
+                'invoice_suffix',
+            ),
+            Fieldset(
+                'Credit Note Title And Sequence',
+                'credit_note_same_sequence',
+                'credit_note_title',
+                'credit_note_prefix',
+                'credit_note_starting_index_number',
+                'credit_note_suffix',
+            ),
+            Fieldset(
+                'Company Details',
+                'include_company_details',
+            ),
+            Fieldset(
+                'Custom Field',
+                'custom_fields',
+            ),
+        )
+        self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
+
+
+class InvoiceSettingsForm(forms.ModelForm):
+    class Meta:
+        model = InvoiceSettings
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):

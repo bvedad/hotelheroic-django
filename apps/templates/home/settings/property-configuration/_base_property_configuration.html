@@ -13,15 +13,23 @@
                    href="{% url 'settings_property_configuration_general_settings' %}">System Settings</a>
             </li>
             <li class="nav-item flex-grow-0">
-                <button class="nav-link mb-sm-3 mb-md-0 {% if '/policies' in request.path %} active {% endif %}" type="button" id="policiesMenuButton"
+                <button class="nav-link mb-sm-3 mb-md-0 {% if '/policies' in request.path %} active {% endif %}"
+                        type="button" id="policiesMenuButton"
                         data-bs-toggle="dropdown" aria-expanded="false">
                     Policies
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="policiesMenuButton">
-                    <li><a class="dropdown-item" href="{% url 'settings_property_configuration_deposit_policy_edit' %}">Deposit Policy</a></li>
-                    <li><a class="dropdown-item" href="{% url 'settings_property_configuration_terms_and_conditions_edit' %}">Terms And Conditions</a></li>
-                    <li><a class="dropdown-item" href="{% url 'settings_property_configuration_arrival_and_departure_edit' %}">Arrival And Departure</a></li>
-                    <li><a class="dropdown-item" href="{% url 'settings_property_configuration_confirmation_pending_edit' %}">Confirmation Pending</a></li>
+                    <li><a class="dropdown-item" href="{% url 'settings_property_configuration_deposit_policy_edit' %}">Deposit
+                        Policy</a></li>
+                    <li><a class="dropdown-item"
+                           href="{% url 'settings_property_configuration_terms_and_conditions_edit' %}">Terms And
+                        Conditions</a></li>
+                    <li><a class="dropdown-item"
+                           href="{% url 'settings_property_configuration_arrival_and_departure_edit' %}">Arrival And
+                        Departure</a></li>
+                    <li><a class="dropdown-item"
+                           href="{% url 'settings_property_configuration_confirmation_pending_edit' %}">Confirmation
+                        Pending</a></li>
                 </ul>
             </li>
             <li class="nav-item flex-grow-0">
@@ -39,6 +47,18 @@
             <li class="nav-item flex-grow-0">
                 <a class="nav-link mb-sm-3 mb-md-0 {% if '/items' in request.path %} active {% endif %}"
                    href="{% url 'settings_item_index' %}">Items</a>
+            </li>
+            <li class="nav-item flex-grow-0">
+                <button class="nav-link mb-sm-3 mb-md-0 {% if '/invoicing' in request.path %} active {% endif %}"
+                        type="button" id="invoicingMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    Invoicing
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="invoicingMenuButton">
+                    <li><a class="dropdown-item" href="{% url 'settings_property_configuration_invoice_details_edit' %}">Invoice Details</a></li>
+                    <li><a class="dropdown-item"
+                           href="{% url 'settings_property_configuration_invoicing_settings_edit' %}">Invoicing Settings</a></li>
+                </ul>
             </li>
             <li class="nav-item flex-grow-0">
                 <a class="nav-link mb-sm-3 mb-md-0 {% if '/custom-fields' in request.path %} active {% endif %}"
