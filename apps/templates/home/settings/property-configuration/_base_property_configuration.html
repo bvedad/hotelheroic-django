@@ -13,6 +13,15 @@
                    href="{% url 'settings_property_configuration_general_settings' %}">System Settings</a>
             </li>
             <li class="nav-item flex-grow-0">
+                <button class="nav-link mb-sm-3 mb-md-0 {% if '/policies' in request.path %} active {% endif %}" type="button" id="policiesMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    Policies
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="policiesMenuButton">
+                    <li><a class="dropdown-item" href="{% url 'settings_property_configuration_deposit_policy_edit' %}">Deposit Policy</a></li>
+                </ul>
+            </li>
+            <li class="nav-item flex-grow-0">
                 <a class="nav-link mb-sm-3 mb-md-0 {% if '/taxes-and-fees' in request.path %} active {% endif %}"
                    href="{% url 'settings_taxes_and_fees' %}">Taxes And Fees</a>
             </li>

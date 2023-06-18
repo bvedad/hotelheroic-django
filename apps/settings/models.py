@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from timezone_field import TimeZoneField
 
@@ -280,3 +281,54 @@ class SystemSettings(models.Model):
         default=False,
         help_text='If enabled, reservations with a remaining balance cannot be checked-in until full payment is collected.'
     )
+
+
+class DepositPolicy(models.Model):
+    DEPOSIT_TYPES = [
+        ('percentage', 'Percentage'),
+        ('fixed_amount', 'Fixed Amount'),
+        ('first_day_price', 'First Day Price'),
+        ('no_deposit', 'Do not collect deposit'),
+    ]
+
+    deposit_type = models.CharField(
+        max_length=15,
+        choices=DEPOSIT_TYPES,
+        default='percentage',
+        help_text='Select the type of deposit for your guests.',
+    )
+
+    deposit_percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text='Specify the required deposit percentage (%).',
+    )
+
+    deposit_fixed_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text='Specify the fixed amount that will be charged per accommodation per night.',
+    )
+
+    include_taxes_fees = models.BooleanField(
+        default=False,
+        help_text='Specify whether taxes and fees will be included as part of the deposit.',
+    )
+
+    capture_credit_card = models.BooleanField(
+        default=False,
+        help_text='Select if you would like to capture the guest credit card details to keep on file.',
+    )
+
+    def __str__(self):
+        return self.deposit_type
+
+    def clean(self):
+        if self.deposit_type == 'percentage' and not self.deposit_percentage:
+            raise ValidationError({'deposit_percentage': 'This field is required for percentage deposit type.'})
+        elif self.deposit_type == 'fixed_amount' and not self.deposit_fixed_amount:
+            raise ValidationError({'deposit_fixed_amount': 'This field is required for fixed amount deposit type.'})

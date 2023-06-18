@@ -6,6 +6,32 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% crispy form %}
+        <script>
+            // Get the deposit_type field
+            var depositTypeField = document.querySelector("#id_deposit_type");
+
+            // Get the relevant field containers
+            var depositPercentageField = document.querySelector("#div_id_deposit_percentage");
+            var depositFixedAmountField = document.querySelector("#div_id_deposit_fixed_amount");
+            var includeTaxesFeesField = document.querySelector("#div_id_include_taxes_fees");
+            var captureCreditCardField = document.querySelector("#div_id_capture_credit_card");
+
+            // Function to toggle the visibility of fields based on the selected deposit type
+            function toggleFieldsVisibility() {
+                var selectedDepositType = depositTypeField.value;
+
+                depositPercentageField.style.display = selectedDepositType === "percentage" ? "block" : "none";
+                depositFixedAmountField.style.display = selectedDepositType === "fixed_amount" ? "block" : "none";
+                includeTaxesFeesField.style.display = selectedDepositType === "first_day_price" ? "block" : "none";
+                captureCreditCardField.style.display = selectedDepositType === "no_deposit" ? "block" : "none";
+            }
+
+            // Add event listener to the deposit_type field
+            depositTypeField.addEventListener("change", toggleFieldsVisibility);
+
+            // Initial call to toggleFieldsVisibility
+            toggleFieldsVisibility();
+        </script>
     </form>
 
 {% endblock property_configuration_content %}
