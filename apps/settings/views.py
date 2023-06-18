@@ -9,8 +9,8 @@ from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
-    AddOnForm, AddOnIntervalForm, SystemSettingsForm
-from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings
+    AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm
+from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
     AddOnIntervalTable
@@ -504,6 +504,22 @@ def settings_property_configuration_general_settings_view(request):
             system_settings = form.save()
     else:
         form = SystemSettingsForm(instance=system_settings)
+    return render(request, 'home/settings/property-configuration/system-settings.html',
+                  {'form': form
+                   })
+
+
+@login_required
+def settings_property_configuration_deposit_policy_edit_view(request):
+    deposit_policy = DepositPolicy.objects.first()
+    if deposit_policy is None:
+        deposit_policy = DepositPolicy.objects.create()
+    if request.method == 'POST':
+        form = DepositPolicyForm(request.POST, instance=deposit_policy)
+        if form.is_valid():
+            form.save()
+    else:
+        form = DepositPolicyForm(instance=deposit_policy)
     return render(request, 'home/settings/property-configuration/system-settings.html',
                   {'form': form
                    })

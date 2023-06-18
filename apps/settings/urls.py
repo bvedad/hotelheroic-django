@@ -22,6 +22,8 @@ urlpatterns = [
          name='settings_taxes_and_fees_edit'),
     path('property-configuration/taxes-and-fees/create/', views.settings_taxes_and_fees_create_view,
          name='settings_taxes_and_fees_create'),
+    path('property-configuration/policies/deposit-policy/', views.settings_property_configuration_deposit_policy_edit_view,
+         name='settings_property_configuration_deposit_policy_edit'),
     path('property-configuration/reservation-sources/', views.ReservationSourcesListView.as_view(),
          name='settings_reservation_sources'),
     path('property-configuration/reservation-sources/<int:pk>/edit/', views.settings_reservation_sources_edit_view,
