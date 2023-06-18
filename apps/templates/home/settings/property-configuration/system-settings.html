@@ -1,0 +1,11 @@
+{% extends "home/settings/property-configuration/_base_property_configuration.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block property_configuration_content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+
+{% endblock property_configuration_content %}

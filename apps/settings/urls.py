@@ -14,6 +14,8 @@ urlpatterns = [
     path('property-details/room-types/create/', views.settings_room_type_create_view, name='settings_room_type_create'),
     path('property-configuration/', views.settings_property_configuration_view,
          name='settings_property_configuration'),
+    path('property-configuration/system-settings/', views.settings_property_configuration_general_settings_view,
+         name='settings_property_configuration_general_settings'),
     path('property-configuration/taxes-and-fees/', views.TaxesAndFeesListView.as_view(),
          name='settings_taxes_and_fees'),
     path('property-configuration/taxes-and-fees/<int:pk>/edit/', views.settings_taxes_and_fees_edit_view,

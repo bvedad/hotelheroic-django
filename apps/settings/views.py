@@ -9,8 +9,8 @@ from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
-    AddOnForm, AddOnIntervalForm
-from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval
+    AddOnForm, AddOnIntervalForm, SystemSettingsForm
+from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
     AddOnIntervalTable
@@ -491,3 +491,19 @@ def settings_addon_interval_create_view(request):
         form = AddOnIntervalForm(initial={'add_on': add_on})
     context = {'form': form}
     return render(request, 'home/settings/property-configuration/addon-interval/create.html', context)
+
+
+@login_required
+def settings_property_configuration_general_settings_view(request):
+    system_settings = SystemSettings.objects.first()
+    if system_settings is None:
+        system_settings = SystemSettings.objects.create()
+    if request.method == 'POST':
+        form = SystemSettingsForm(request.POST, instance=system_settings)
+        if form.is_valid():
+            system_settings = form.save()
+    else:
+        form = SystemSettingsForm(instance=system_settings)
+    return render(request, 'home/settings/property-configuration/system-settings.html',
+                  {'form': form
+                   })

@@ -1,13 +1,13 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, Div, HTML, Submit, Button
-from django.forms import inlineformset_factory, formset_factory
+from crispy_forms.layout import Layout, Fieldset, Div, Submit, Button
+from django.forms import inlineformset_factory
 
 from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmenity
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
-from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval
+from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -247,3 +247,54 @@ class AddOnIntervalForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
         self.helper.add_input(
             Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back();"))
+
+
+class SystemSettingsForm(forms.ModelForm):
+    class Meta:
+        model = SystemSettings
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'General Settings',
+                Div(
+                    Div('application_language', css_class='col-md-6'),
+                    Div('application_date_format', css_class='col-md-6'),
+                    Div('application_time_format', css_class='col-md-6'),
+                    Div('application_currency', css_class='col-md-6'),
+                    css_class='row'
+                ),
+            ),
+            Fieldset(
+                'Automation Preferences',
+                Div(
+                    Div('allow_additional_bookings', css_class='col-md-6'),
+                    Div('auto_change_no_show', css_class='col-md-6'),
+                    Div('auto_checkout_date_extension', css_class='col-md-6'),
+                    Div('auto_assign_reservations', css_class='col-md-6'),
+                    Div('use_default_country_for_guest', css_class='col-md-6'),
+                    Div('allow_same_day_bookings', css_class='col-md-6'),
+                    Div('same_day_bookings_until', css_class='col-md-6'),
+                    css_class='row'
+                ),
+            ),
+            Fieldset(
+                'Miscellaneous Preferences',
+                Div(
+                    Div('show_estimated_arrival_time', css_class='col-md-6'),
+                    Div('show_checkouts_in_departure_list', css_class='col-md-6'),
+                    Div('enable_gdpr_compliance', css_class='col-md-6'),
+                    Div('customer_name_format', css_class='col-md-6'),
+                    Div('enable_payment_allocation', css_class='col-md-6'),
+                    Div('breakfast_included_channel_distribution', css_class='col-md-6'),
+                    Div('require_full_payment_prior_to_check_in', css_class='col-md-6'),
+                    css_class='row'
+                ),
+            ),
+        )
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))

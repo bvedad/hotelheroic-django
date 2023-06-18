@@ -1,4 +1,5 @@
 from django.db import models
+from timezone_field import TimeZoneField
 
 from apps.item.models import Item
 from apps.room.models import RoomType
@@ -136,3 +137,146 @@ class AddOnInterval(models.Model):
 
     def __str__(self):
         return f"Interval for {self.add_on.name}"
+
+
+class SystemSettings(models.Model):
+    # General Settings
+    APPLICATION_LANGUAGES = [
+        ('en', 'English'),
+        ('bs', 'Bosnian'),
+        # Add more language options here
+    ]
+
+    APPLICATION_DATE_FORMATS = [
+        ('d/m/Y', 'DD/MM/YYYY'),
+        ('Y-m-d', 'YYYY-MM-DD'),
+        ('m/d/Y', 'MM/DD/YYYY'),
+    ]
+
+    APPLICATION_TIME_FORMATS = [
+        ('H:i', '24-hour format'),
+        ('h:i A', '12-hour format'),
+    ]
+
+    APPLICATION_CURRENCIES = [
+        ('EUR', 'Euro'),
+        ('USD', 'US Dollar'),
+    ]
+
+    application_language = models.CharField(
+        max_length=2,
+        choices=APPLICATION_LANGUAGES,
+        default='en',
+        help_text='Select the default language for your property. New user accounts will have this language.',
+    )
+
+    application_date_format = models.CharField(
+        max_length=10,
+        choices=APPLICATION_DATE_FORMATS,
+        default='d/m/Y',
+        help_text='Select the format in which the date is shown on HotelHeroic PMS.',
+    )
+
+    application_time_format = models.CharField(
+        max_length=6,
+        choices=APPLICATION_TIME_FORMATS,
+        default='H:i',
+        help_text='Select the format in which the time is shown on HotelHeroic PMS.',
+    )
+
+    property_time_zone = TimeZoneField(
+        help_text='The time zone of your property.',
+        default='Europe/Sarajevo',
+    )
+
+    # application_currency_format = models.CharField(
+    #     max_length=10,
+    #     choices=APPLICATION_CURRENCY_FORMATS,
+    #     help_text='Select the format in which the currency is shown on Cloudbeds PMS.',
+    # )
+
+    application_currency = models.CharField(
+        max_length=50,
+        choices=APPLICATION_CURRENCIES,
+        default='EUR',
+        help_text='The main currency on Cloudbeds PMS.',
+    )
+
+    # Automation Preferences
+    allow_additional_bookings = models.BooleanField(
+        default=False,
+        help_text='Enabling this will open availability when your property is at no less than 100% occupancy.'
+    )
+
+    auto_change_no_show = models.BooleanField(
+        default=True,
+        help_text='When a guest does not show up the next day after the arrival date by 2:05 AM, the system will automatically change the status of the reservation to "No Show".'
+    )
+
+    auto_checkout_date_extension = models.BooleanField(
+        default=True,
+        help_text='When a guest does not manually check out until 2:05 AM the next day, the system will automatically extend the reservation date.'
+    )
+
+    auto_assign_reservations = models.BooleanField(
+        default=False,
+        help_text='If enabled, all new reservations will be auto-assigned to the first available accommodation within that room type.'
+    )
+
+    use_default_country_for_guest = models.BooleanField(
+        default=False,
+        help_text='When turned on, the country field in guest details will be pre-filled with your property\'s country.'
+    )
+
+    allow_same_day_bookings = models.BooleanField(
+        default=False,
+        help_text='If enabled, guests will be allowed to book same-day arrivals.'
+    )
+
+    same_day_bookings_until = models.TimeField(
+        null=True,
+        blank=True,
+        help_text='Specify until what time the guest is allowed to book for the same-day arrival.'
+    )
+
+    # MiscellaneousPreferences
+    CUSTOMER_NAME_FORMAT_CHOICES = [
+        ('SURNAME_NAME', 'Surname Name'),
+        ('NAME_SURNAME', 'Name Surname'),
+    ]
+    show_estimated_arrival_time = models.BooleanField(
+        default=False,
+        help_text='Gives you the option to fill in the guest\'s estimated arrival time when creating direct reservations.'
+    )
+
+    show_checkouts_in_departure_list = models.BooleanField(
+        default=True,
+        help_text='If enabled, the property can see guests who have already checked out in their dashboard\'s Departure List.'
+    )
+
+    enable_gdpr_compliance = models.BooleanField(
+        default=False,
+        help_text='If enabled, tools to comply with GDPR such as Guest Data Extraction, Anonymization, and Marketing Opt-In will be available to your property.'
+    )
+
+    customer_name_format = models.CharField(
+        max_length=50,
+        choices=CUSTOMER_NAME_FORMAT_CHOICES,
+        default='SURNAME_NAME',
+        help_text='Specifies how the customer name is displayed in the calendar.'
+    )
+
+    enable_payment_allocation = models.BooleanField(
+        default=False,
+        help_text='Enabling payment allocation allows users to specify exactly which charge a payment is for.'
+    )
+
+    breakfast_included_channel_distribution = models.BooleanField(
+        default=False,
+        help_text='Tells channels (OTAs) if breakfast pricing is included in your nightly rates.'
+    )
+
+    require_full_payment_prior_to_check_in = models.BooleanField(
+        default=False,
+        help_text='If enabled, reservations with a remaining balance cannot be checked-in until full payment is collected.'
+    )
