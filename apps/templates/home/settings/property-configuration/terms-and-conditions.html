@@ -1,0 +1,33 @@
+{% extends "home/settings/property-configuration/_base_property_configuration.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block property_configuration_content %}
+    <div>
+        <p>
+            Every property has its own policies and you must include your property's terms under this section. Some
+            examples
+            of sections typically addressed under terms and conditions include:
+        </p>
+        <ul>
+            <li>Prices and Taxes</li>
+            <li>Payment and Terms at Check-in/Check-out</li>
+            <li>Traveling with Minors</li>
+            <li>Accessibility or Special Needs</li>
+            <li>Parking</li>
+            <li>Hotel Events</li>
+            <li>Dispute Resolution/Issues</li>
+            <li>Use of Personal Information</li>
+            <li>Liability</li>
+            <li>Force Majeure</li>
+            <li>Third Party Rights</li>
+            <li>Waiver</li>
+            <li>Severance</li>
+        </ul>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+
+{% endblock property_configuration_content %}

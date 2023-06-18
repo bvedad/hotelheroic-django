@@ -7,7 +7,8 @@ from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmen
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
-from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy
+from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
+    TermsAndConditions
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -309,4 +310,26 @@ class DepositPolicyForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
+
+
+class TermsAndConditionsForm(forms.ModelForm):
+    class Meta:
+        model = TermsAndConditions
+        fields = "__all__"
+        labels = {
+            'content': '',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.layout = Layout(
+            Div(
+                Div('language', css_class='col-md-3'),
+                Div('content', css_class='col-md-9'),
+                css_class='row'
+            ),
+        )
         self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
