@@ -9,9 +9,10 @@ from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
-    AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, ArrivalAndDepartureForm
+    AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, \
+    ArrivalAndDepartureForm, ConfirmationPendingForm
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
-    TermsAndConditions, ArrivalAndDeparture
+    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
     AddOnIntervalTable
@@ -553,6 +554,22 @@ def settings_property_configuration_arrival_and_departure_edit_view(request):
             form.save()
     else:
         form = ArrivalAndDepartureForm(instance=arrival_and_departure)
+    return render(request, 'home/settings/property-configuration/arrival-and-departure.html',
+                  {'form': form
+                   })
+
+
+@login_required
+def settings_property_configuration_confirmation_pending_edit_view(request):
+    confirmation_pending = ConfirmationPending.objects.first()
+    if confirmation_pending is None:
+        confirmation_pending = ConfirmationPending()
+    if request.method == 'POST':
+        form = ConfirmationPendingForm(request.POST, instance=confirmation_pending)
+        if form.is_valid():
+            form.save()
+    else:
+        form = ConfirmationPendingForm(instance=confirmation_pending)
     return render(request, 'home/settings/property-configuration/arrival-and-departure.html',
                   {'form': form
                    })

@@ -8,7 +8,7 @@ from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
-    TermsAndConditions, ArrivalAndDeparture
+    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -344,6 +344,18 @@ class ArrivalAndDepartureForm(forms.ModelForm):
             'check_out_time': forms.TimeInput(attrs={'type': 'time'}),
             'late_check_out_time': forms.TimeInput(attrs={'type': 'time'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Save', css_class='btn btn-primary'))
+
+
+class ConfirmationPendingForm(forms.ModelForm):
+    class Meta:
+        model = ConfirmationPending
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

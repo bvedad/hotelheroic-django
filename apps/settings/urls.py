@@ -28,6 +28,8 @@ urlpatterns = [
          name='settings_property_configuration_terms_and_conditions_edit'),
     path('property-configuration/policies/arrival-and-departure/', views.settings_property_configuration_arrival_and_departure_edit_view,
          name='settings_property_configuration_arrival_and_departure_edit'),
+    path('property-configuration/policies/confirmation-pending/', views.settings_property_configuration_confirmation_pending_edit_view,
+         name='settings_property_configuration_confirmation_pending_edit'),
     path('property-configuration/reservation-sources/', views.ReservationSourcesListView.as_view(),
          name='settings_reservation_sources'),
     path('property-configuration/reservation-sources/<int:pk>/edit/', views.settings_reservation_sources_edit_view,
