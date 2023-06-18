@@ -396,3 +396,94 @@ class ConfirmationPending(models.Model):
         default='confirmed',
         help_text='Select your preferred default confirmation status for new reservations.'
     )
+
+
+class InvoiceDetails(models.Model):
+    company_logo = models.ImageField(
+        upload_to='company_logo',
+        help_text='Upload your company logo. Recommended size: 100x100 pixels.',
+    )
+    invoice_title = models.CharField(
+        max_length=100,
+        help_text='Specify the title to be used for the invoice.',
+    )
+    invoice_prefix = models.CharField(
+        max_length=50,
+        help_text='Enter any numbers or letters to appear before the sequentially generated invoice number.',
+    )
+    starting_index_number = models.PositiveIntegerField(
+        help_text='Specify the number of the first invoice that gets generated. The subsequent invoices will be sequential.',
+    )
+    invoice_suffix = models.CharField(
+        max_length=50,
+        help_text='Enter any numbers or letters to appear after the sequentially generated invoice number.',
+    )
+    include_company_details = models.BooleanField(
+        default=True,
+        help_text='Include your Legal Company Name and Tax ID Number in the invoice.',
+    )
+    custom_fields = models.TextField(
+        blank=True,
+        help_text='Add any additional text to the invoice, such as payment instructions or policies.',
+    )
+    credit_note_same_sequence = models.BooleanField(
+        default=True,
+        help_text='Use the same numbering sequence for credit notes as invoices.',
+    )
+    credit_note_title = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text='Specify the title to be used for credit notes.',
+    )
+    credit_note_prefix = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text='Enter any numbers or letters to appear before the sequentially generated credit note number.',
+    )
+    credit_note_starting_index_number = models.PositiveIntegerField(
+        blank=True,
+        help_text='Specify the number of the first credit note that gets generated.',
+    )
+    credit_note_suffix = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text='Enter any numbers or letters to appear after the sequentially generated credit note number.',
+    )
+
+
+class InvoiceSettings(models.Model):
+    default_language = models.CharField(
+        max_length=50,
+        help_text='Select the default language for the invoice.',
+    )
+    generate_invoice_based_on_country = models.BooleanField(
+        default=False,
+        help_text='Generate the invoice based on the country the guest is from.',
+    )
+    generate_invoice_option = models.CharField(
+        max_length=20,
+        choices=[
+            ('reservation_creation', 'At reservation creation'),
+            ('check_out', 'At check-out'),
+            ('manual', 'Manually'),
+        ],
+        default='manual',
+        help_text='Select when to generate the invoice.',
+    )
+    default_due_date = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text='Specify the number of days the guest has to pay the invoice from the time it is generated.',
+    )
+    show_room_number_column = models.BooleanField(
+        default=False,
+        help_text='Show the room number column on the invoice.',
+    )
+    show_tax_specifics = models.BooleanField(
+        default=False,
+        help_text='Show the breakdown of each tax/fee type on the invoice.',
+    )
+    use_compact_invoices = models.BooleanField(
+        default=False,
+        help_text='Consolidate common transactions into their own line on the invoice.',
+    )
