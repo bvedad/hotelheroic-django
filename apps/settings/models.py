@@ -353,10 +353,12 @@ class TermsAndConditions(models.Model):
     def __str__(self):
         return self.language
 
+
 class ArrivalAndDeparture(models.Model):
     check_in_time = models.TimeField(help_text='Set the check-in time for your property.')
     check_out_time = models.TimeField(help_text='Set the check-out time for your property.')
-    late_check_out_allowed = models.BooleanField(default=False, help_text='Specify whether you offer a late check-out option.')
+    late_check_out_allowed = models.BooleanField(default=False,
+                                                 help_text='Specify whether you offer a late check-out option.')
 
     late_check_out_time = models.TimeField(
         null=True,
@@ -380,4 +382,17 @@ class ArrivalAndDeparture(models.Model):
         decimal_places=2,
         default=0.00,
         help_text='Set the amount for the late check-out charge.'
+    )
+
+
+class ConfirmationPending(models.Model):
+    CONFIRMATION_STATUS_CHOICES = [
+        ('confirmed', 'Confirmed'),
+        ('confirmation_pending', 'Confirmation Pending'),
+    ]
+    default_confirmation_status = models.CharField(
+        max_length=20,
+        choices=CONFIRMATION_STATUS_CHOICES,
+        default='confirmed',
+        help_text='Select your preferred default confirmation status for new reservations.'
     )
