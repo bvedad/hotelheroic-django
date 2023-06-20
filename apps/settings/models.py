@@ -573,3 +573,31 @@ class BankTransfer(models.Model):
 
     def __str__(self):
         return 'Bank Transfer Payment Option'
+
+class PayPal(models.Model):
+    active = models.BooleanField(
+        default=False,
+        help_text='Switch to activate or deactivate PayPal as a payment option for your guests.'
+    )
+    email_address = models.EmailField(
+        verbose_name='Email Address',
+        help_text='Enter the email address associated with your PayPal account.'
+    )
+    identity_token = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text='Enter the PayPal Identity Token, if necessary.'
+    )
+    first_name = models.CharField(
+        max_length=100,
+        verbose_name='First Name',
+        help_text='Enter the first name of the person the PayPal account is registered under.'
+    )
+    last_name = models.CharField(
+        max_length=100,
+        verbose_name='Last Name',
+        help_text='Enter the last name of the person the PayPal account is registered under.'
+    )
+
+    def __str__(self):
+        return 'PayPal Payment Option'

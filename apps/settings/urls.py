@@ -44,6 +44,8 @@ urlpatterns = [
          name='settings_property_configuration_credit_card_index'),
     path('property-configuration/payment-options/bank-transfer/', views.settings_property_configuration_bank_transfer_edit_view,
          name='settings_property_configuration_bank_transfer_edit'),
+    path('property-configuration/payment-options/paypal/', views.settings_property_configuration_paypal_edit_view,
+         name='settings_property_configuration_paypal_edit'),
     path('credit-card/create/', views.CreditCardCreateView.as_view(), name='create_credit_card'),
     path('credit-card/update/<int:pk>/', views.CreditCardUpdateView.as_view(), name='update_credit_card'),
     path('credit-card/delete/<int:pk>/', views.CreditCardDeleteView.as_view(), name='delete_credit_card'),
