@@ -1,6 +1,8 @@
+from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse_lazy
 from django_tables2 import SingleTableView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -13,12 +15,12 @@ from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm,
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
     AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, \
     ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm, SystemNotificationForm, \
-    generate_formset, SystemNotificationFormSet
+    generate_formset, SystemNotificationFormSet, CreditCardForm
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
-    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings
+    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, CreditCard
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
-    AddOnIntervalTable, UserTable
+    AddOnIntervalTable, UserTable, CreditCardTable
 from apps.taxesandfees.models import TaxAndFee
 
 User = get_user_model()
@@ -617,6 +619,7 @@ def settings_system_notifications_edit_view(request):
     }
     return render(request, 'home/settings/system-notifications.html', context)
 
+
 @login_required
 def settings_user_management_view(request):
     return redirect('settings_user_index')
@@ -655,3 +658,31 @@ def settings_user_create_view(request):
         form = UserForm()
     context = {'form': form}
     return render(request, 'home/settings/user-management/user/create.html', context)
+
+
+class CreditCardListView(LoginRequiredMixin, SingleTableView):
+    model = CreditCard
+    table_class = CreditCardTable
+    template_name = 'home/settings/property-configuration/credit-card.html'
+
+
+class CreditCardCreateView(BSModalCreateView):
+    template_name = 'home/settings/property-configuration/credit-card/create.html'
+    form_class = CreditCardForm
+    success_message = 'Success: Credit Card was created.'
+    success_url = reverse_lazy('settings_property_configuration_credit_card_index')
+
+
+class CreditCardUpdateView(BSModalUpdateView):
+    model = CreditCard
+    template_name = 'home/settings/property-configuration/credit-card/edit.html'
+    form_class = CreditCardForm
+    success_message = 'Success: Credit Card was updated.'
+    success_url = reverse_lazy('settings_property_configuration_credit_card_index')
+
+
+class CreditCardDeleteView(BSModalDeleteView):
+    model = CreditCard
+    template_name = 'home/settings/property-configuration/credit-card/delete.html'
+    success_message = 'Success: Credit Card was deleted.'
+    success_url = reverse_lazy('settings_property_configuration_credit_card_index')

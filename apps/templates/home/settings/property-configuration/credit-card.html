@@ -1,0 +1,33 @@
+{% extends "home/settings/property-configuration/_base_property_configuration.html" %}
+
+{% load static %}
+{% load render_table from django_tables2 %}
+
+{% block property_configuration_content %}
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <button id="create-credit-card" class="btn btn-primary" type="button" name="button">Create Credit Card</button>
+
+    <script src="{% static 'js/bootstrap5.modal.forms.js' %}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (e) => {
+            modalForm(document.getElementById('create-credit-card'), {
+                formURL: "{% url 'create_credit_card' %}"
+            })
+            const updateButtons = document.querySelectorAll('.update-credit-card');
+            updateButtons.forEach(button => {
+                modalForm(button, {
+                    formURL: button.dataset.formUrl
+                })
+            });
+
+        });
+    </script>
+
+    {% render_table table 'django_tables2/bootstrap.html' %}
+
+{% endblock property_configuration_content %}

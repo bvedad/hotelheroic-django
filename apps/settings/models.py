@@ -489,6 +489,7 @@ class InvoiceSettings(models.Model):
         help_text='Consolidate common transactions into their own line on the invoice.',
     )
 
+
 User = get_user_model()
 
 
@@ -529,3 +530,15 @@ class SystemNotification(models.Model):
     def __str__(self):
         return dict(self.NOTIFICATION_CHOICES).get(self.notification_type, '')
 
+
+class CreditCard(models.Model):
+    CARD_TYPE_CHOICES = [
+        ('VISA', 'Visa'),
+        ('MASTERCARD', 'Mastercard'),
+        ('AMEX', 'American Express'),
+        ('DISCOVER', 'Discover'),
+    ]
+
+    card_type = models.CharField(max_length=50, choices=CARD_TYPE_CHOICES, unique=True)
+    accepted_for_direct_reservations = models.BooleanField(default=False)
+    accepted_for_mybookings = models.BooleanField(default=False)
