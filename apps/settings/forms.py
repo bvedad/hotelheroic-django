@@ -1,3 +1,5 @@
+from bootstrap_modal_forms.forms import BSModalModelForm
+from crispy_forms.bootstrap import Modal
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, Button, Field, HTML
@@ -8,7 +10,8 @@ from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
-    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, SystemNotification
+    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, SystemNotification, \
+    CreditCard
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -446,3 +449,14 @@ def generate_formset():
     helper.add_input(Submit('submit', 'Save'))
 
     return formset, helper
+
+
+class CreditCardForm(BSModalModelForm):
+    class Meta:
+        model = CreditCard
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False

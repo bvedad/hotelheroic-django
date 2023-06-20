@@ -2,15 +2,17 @@ import django_tables2 as tables
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.html import format_html
+from heroicons.jinja import heroicon_outline
 
 from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmenity
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
-from apps.settings.models import GuestStatus, AddOn, AddOnInterval
+from apps.settings.models import GuestStatus, AddOn, AddOnInterval, CreditCard
 from apps.taxesandfees.models import TaxAndFee
 
 User = get_user_model()
+
 
 class EmailTemplateTable(tables.Table):
     def render_name(self, value, record):
@@ -144,3 +146,21 @@ class UserTable(tables.Table):
     class Meta:
         model = User
         fields = ("is_active", "email", "first_name", "last_name", "user_permissions")
+
+
+class CreditCardTable(tables.Table):
+    actions = tables.Column(
+        empty_values=(),
+    )
+
+    def render_actions(self, record):
+        edit_url = reverse('update_credit_card', args=[record.pk])
+        delete_url = reverse('delete_credit_card', args=[record.pk])
+        return format_html("""
+        <button type="button" class="update-credit-card btn btn-sm btn-primary" data-form-url="{}">{}</button>
+        <button type="button" class="update-credit-card btn btn-sm btn-danger" data-form-url="{}">{}</button>
+        """, edit_url, heroicon_outline("pencil"), delete_url, heroicon_outline("trash"))
+
+    class Meta:
+        model = CreditCard
+        fields = ("card_type", "accepted_for_direct_reservations", "accepted_for_mybookings",)

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     "crispy_bootstrap5",
     "django_tables2",
+    'bootstrap_modal_forms',
     'django_filters',
     "heroicons",
     'apps.home',  # Enable the inner home (home)

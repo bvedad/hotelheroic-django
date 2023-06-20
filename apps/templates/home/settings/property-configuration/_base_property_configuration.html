@@ -41,6 +41,16 @@
                    href="{% url 'settings_reservation_sources' %}">Reservation Sources</a>
             </li>
             <li class="nav-item flex-grow-0">
+                <button class="nav-link mb-sm-3 mb-md-0 {% if '/payment-options' in request.path %} active {% endif %}"
+                        type="button" id="paymentOptionsMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    Payment Options
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="paymentOptionsMenuButton">
+                    <li><a class="dropdown-item" href="{% url 'settings_property_configuration_credit_card_index' %}">Credit Cards</a></li>
+                </ul>
+            </li>
+            <li class="nav-item flex-grow-0">
                 <a class="nav-link mb-sm-3 mb-md-0 {% if '/item-categories' in request.path %} active {% endif %}"
                    href="{% url 'settings_item_category_index' %}">Item Categories</a>
             </li>
