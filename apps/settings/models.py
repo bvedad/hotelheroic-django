@@ -542,3 +542,34 @@ class CreditCard(models.Model):
     card_type = models.CharField(max_length=50, choices=CARD_TYPE_CHOICES, unique=True)
     accepted_for_direct_reservations = models.BooleanField(default=False)
     accepted_for_mybookings = models.BooleanField(default=False)
+
+
+class BankTransfer(models.Model):
+    active = models.BooleanField(
+        default=False,
+        help_text='Switch to activate or deactivate Bank Transfer as a payment option for your property.'
+    )
+    direct_reservations_allowed = models.BooleanField(
+        default=False,
+        help_text='Allow Bank Transfer as a payment option for direct/dashboard reservations.'
+    )
+    booking_engine_allowed = models.BooleanField(
+        default=False,
+        help_text='Allow Bank Transfer as a payment option for bookings made through the Mybookings Booking Engine.'
+    )
+    bank_name = models.CharField(
+        max_length=100,
+        help_text='Enter the name of your bank.'
+    )
+    bank_address = models.TextField(
+        help_text='Enter the address of your bank.'
+    )
+    property_address = models.TextField(
+        help_text='Enter the address of your property where bank transfer details should be listed.'
+    )
+    instructions = RichTextField(
+        help_text='Instructions for completing the transfer.'
+    )
+
+    def __str__(self):
+        return 'Bank Transfer Payment Option'
