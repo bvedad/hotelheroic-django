@@ -1,9 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
 from django_tables2 import SingleTableView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmenity
+from apps.authentication.forms import UserForm
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
@@ -16,8 +18,10 @@ from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, Syste
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
-    AddOnIntervalTable
+    AddOnIntervalTable, UserTable
 from apps.taxesandfees.models import TaxAndFee
+
+User = get_user_model()
 
 
 @login_required
@@ -47,11 +51,6 @@ def settings_property_details_property_profile_view(request):
 @login_required
 def settings_property_configuration_view(request):
     return redirect('settings_taxes_and_fees')
-
-
-@login_required
-def settings_user_management_view(request):
-    return render(request, 'home/settings/user-management.html')
 
 
 @login_required
@@ -617,3 +616,42 @@ def settings_system_notifications_edit_view(request):
         'helper': helper,
     }
     return render(request, 'home/settings/system-notifications.html', context)
+
+@login_required
+def settings_user_management_view(request):
+    return redirect('settings_user_index')
+
+
+class UserListView(LoginRequiredMixin, SingleTableView):
+    model = User
+    table_class = UserTable
+    template_name = 'home/settings/user-management/user/index.html'
+
+
+@login_required
+def settings_user_edit_view(request, pk):
+    item = get_object_or_404(User, pk=pk)
+
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+        return redirect(
+            'settings_user_index')
+    else:
+        form = UserForm(instance=item)
+        context = {'form': form}
+        return render(request, 'home/settings/user-management/user/edit.html', context)
+
+
+@login_required
+def settings_user_create_view(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_user_index')
+    else:
+        form = UserForm()
+    context = {'form': form}
+    return render(request, 'home/settings/user-management/user/create.html', context)

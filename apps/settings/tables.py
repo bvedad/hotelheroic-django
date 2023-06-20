@@ -1,4 +1,5 @@
 import django_tables2 as tables
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.html import format_html
 
@@ -9,6 +10,7 @@ from apps.room.models import RoomType
 from apps.settings.models import GuestStatus, AddOn, AddOnInterval
 from apps.taxesandfees.models import TaxAndFee
 
+User = get_user_model()
 
 class EmailTemplateTable(tables.Table):
     def render_name(self, value, record):
@@ -132,3 +134,13 @@ class AddOnIntervalTable(tables.Table):
     class Meta:
         model = AddOnInterval
         fields = ("name", "start_date", "end_date", "room_types")
+
+
+class UserTable(tables.Table):
+    def render_email(self, value, record):
+        edit_url = reverse('settings_user_edit', args=[record.pk])
+        return format_html('<a href="{}">{}</a>', edit_url, value)
+
+    class Meta:
+        model = User
+        fields = ("is_active", "email", "first_name", "last_name", "user_permissions")
