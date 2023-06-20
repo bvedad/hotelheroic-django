@@ -15,9 +15,10 @@ from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm,
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
     AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, \
     ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm, SystemNotificationForm, \
-    generate_formset, SystemNotificationFormSet, CreditCardForm
+    generate_formset, SystemNotificationFormSet, CreditCardForm, BankTransferForm
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
-    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, CreditCard
+    TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, CreditCard, \
+    BankTransfer
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
     AddOnIntervalTable, UserTable, CreditCardTable
@@ -663,7 +664,7 @@ def settings_user_create_view(request):
 class CreditCardListView(LoginRequiredMixin, SingleTableView):
     model = CreditCard
     table_class = CreditCardTable
-    template_name = 'home/settings/property-configuration/credit-card.html'
+    template_name = 'home/settings/property-configuration/credit-card/index.html'
 
 
 class CreditCardCreateView(BSModalCreateView):
@@ -686,3 +687,19 @@ class CreditCardDeleteView(BSModalDeleteView):
     template_name = 'home/settings/property-configuration/credit-card/delete.html'
     success_message = 'Success: Credit Card was deleted.'
     success_url = reverse_lazy('settings_property_configuration_credit_card_index')
+
+
+@login_required
+def settings_property_configuration_bank_transfer_edit_view(request):
+    bank_transfer = BankTransfer.objects.first()
+    if bank_transfer is None:
+        bank_transfer = BankTransfer()
+    if request.method == 'POST':
+        form = BankTransferForm(request.POST, instance=bank_transfer)
+        if form.is_valid():
+            form.save()
+    else:
+        form = BankTransferForm(instance=bank_transfer)
+    return render(request, 'home/settings/property-configuration/bank-transfer.html',
+                  {'form': form
+                   })

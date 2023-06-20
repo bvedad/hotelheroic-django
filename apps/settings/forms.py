@@ -11,7 +11,7 @@ from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, SystemNotification, \
-    CreditCard
+    CreditCard, BankTransfer
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -455,6 +455,20 @@ class CreditCardForm(BSModalModelForm):
     class Meta:
         model = CreditCard
         fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+
+class BankTransferForm(forms.ModelForm):
+    class Meta:
+        model = BankTransfer
+        fields = '__all__'
+        labels = {
+            'instructions': '',
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
