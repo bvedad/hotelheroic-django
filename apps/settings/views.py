@@ -15,10 +15,10 @@ from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm,
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
     AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, \
     ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm, SystemNotificationForm, \
-    generate_formset, SystemNotificationFormSet, CreditCardForm, BankTransferForm
+    generate_formset, SystemNotificationFormSet, CreditCardForm, BankTransferForm, PayPalForm
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, CreditCard, \
-    BankTransfer
+    BankTransfer, PayPal
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
     AddOnIntervalTable, UserTable, CreditCardTable
@@ -701,5 +701,21 @@ def settings_property_configuration_bank_transfer_edit_view(request):
     else:
         form = BankTransferForm(instance=bank_transfer)
     return render(request, 'home/settings/property-configuration/bank-transfer.html',
+                  {'form': form
+                   })
+
+
+@login_required
+def settings_property_configuration_paypal_edit_view(request):
+    paypal = PayPal.objects.first()
+    if paypal is None:
+        paypal = PayPal()
+    if request.method == 'POST':
+        form = PayPalForm(request.POST, instance=paypal)
+        if form.is_valid():
+            form.save()
+    else:
+        form = PayPalForm(instance=paypal)
+    return render(request, 'home/settings/property-configuration/paypal.html',
                   {'form': form
                    })
