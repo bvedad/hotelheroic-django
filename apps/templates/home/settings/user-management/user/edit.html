@@ -1,0 +1,18 @@
+{% extends "home/settings/user-management/_base_user_management.html" %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+{% block title %} Users - Edit {% endblock %}
+
+{% block user_management_content %}
+    <div class="p-4">
+        <div class="row">
+            <div class="col-md-6">
+                <form method="post">
+                    {% csrf_token %}
+                    {% crispy form %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock user_management_content %}

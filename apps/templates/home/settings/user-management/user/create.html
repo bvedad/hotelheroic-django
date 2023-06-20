@@ -1,0 +1,13 @@
+{% extends "home/settings/user-management/_base_user_management.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Users - Create {% endblock %}
+
+{% block user_management_content %}
+    <div class="p-4">
+        <form method="post">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
+    </div>
+{% endblock user_management_content %}
