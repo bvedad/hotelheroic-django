@@ -8,7 +8,7 @@ from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmen
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
-from apps.settings.models import GuestStatus, AddOn, AddOnInterval, CreditCard
+from apps.settings.models import GuestStatus, AddOn, AddOnInterval, CreditCard, CustomPaymentMethod
 from apps.taxesandfees.models import TaxAndFee
 
 User = get_user_model()
@@ -164,3 +164,21 @@ class CreditCardTable(tables.Table):
     class Meta:
         model = CreditCard
         fields = ("card_type", "accepted_for_direct_reservations", "accepted_for_mybookings",)
+
+
+class CustomPaymentMethodTable(tables.Table):
+    actions = tables.Column(
+        empty_values=(),
+    )
+
+    def render_actions(self, record):
+        edit_url = reverse('update_custom_payment_method', args=[record.pk])
+        delete_url = reverse('delete_custom_payment_method', args=[record.pk])
+        return format_html("""
+        <button type="button" class="update-custom-payment-method btn btn-sm btn-primary" data-form-url="{}">{}</button>
+        <button type="button" class="update-custom-payment-method btn btn-sm btn-danger" data-form-url="{}">{}</button>
+        """, edit_url, heroicon_outline("pencil"), delete_url, heroicon_outline("trash"))
+
+    class Meta:
+        model = CustomPaymentMethod
+        fields = ('label', 'is_active', 'actions')
