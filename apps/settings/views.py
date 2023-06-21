@@ -15,13 +15,13 @@ from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm,
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
     AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, \
     ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm, SystemNotificationForm, \
-    generate_formset, SystemNotificationFormSet, CreditCardForm, BankTransferForm, PayPalForm
+    generate_formset, SystemNotificationFormSet, CreditCardForm, BankTransferForm, PayPalForm, CustomPaymentMethodForm
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, CreditCard, \
-    BankTransfer, PayPal
+    BankTransfer, PayPal, CustomPaymentMethod
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
-    AddOnIntervalTable, UserTable, CreditCardTable
+    AddOnIntervalTable, UserTable, CreditCardTable, CustomPaymentMethodTable
 from apps.taxesandfees.models import TaxAndFee
 
 User = get_user_model()
@@ -719,3 +719,31 @@ def settings_property_configuration_paypal_edit_view(request):
     return render(request, 'home/settings/property-configuration/paypal.html',
                   {'form': form
                    })
+
+
+class CustomPaymentMethodListView(LoginRequiredMixin, SingleTableView):
+    model = CustomPaymentMethod
+    table_class = CustomPaymentMethodTable
+    template_name = 'home/settings/property-configuration/custom-payment-method/index.html'
+
+
+class CustomPaymentMethodCreateView(BSModalCreateView):
+    template_name = 'home/settings/property-configuration/custom-payment-method/create.html'
+    form_class = CustomPaymentMethodForm
+    success_message = 'Success: Custom Payment Method was created.'
+    success_url = reverse_lazy('settings_property_configuration_custom_payment_method_index')
+
+
+class CustomPaymentMethodUpdateView(BSModalUpdateView):
+    model = CustomPaymentMethod
+    template_name = 'home/settings/property-configuration/custom-payment-method/edit.html'
+    form_class = CustomPaymentMethodForm
+    success_message = 'Success: Custom Payment Method was updated.'
+    success_url = reverse_lazy('settings_property_configuration_custom_payment_method_index')
+
+
+class CustomPaymentMethodDeleteView(BSModalDeleteView):
+    model = CustomPaymentMethod
+    template_name = 'home/settings/property-configuration/custom-payment-method/delete.html'
+    success_message = 'Success: Custom Payment Method was deleted.'
+    success_url = reverse_lazy('settings_property_configuration_custom_payment_method_index')

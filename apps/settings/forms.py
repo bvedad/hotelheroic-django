@@ -11,7 +11,7 @@ from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, SystemNotification, \
-    CreditCard, BankTransfer, PayPal
+    CreditCard, BankTransfer, PayPal, CustomPaymentMethod
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -480,6 +480,17 @@ class PayPalForm(forms.ModelForm):
     class Meta:
         model = PayPal
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+
+class CustomPaymentMethodForm(BSModalModelForm):
+    class Meta:
+        model = CustomPaymentMethod
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

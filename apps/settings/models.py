@@ -601,3 +601,18 @@ class PayPal(models.Model):
 
     def __str__(self):
         return 'PayPal Payment Option'
+
+
+class CustomPaymentMethod(models.Model):
+    label = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text='Enter the label/name for your custom payment method.'
+    )
+    active = models.BooleanField(
+        default=True,
+        help_text='Switch to activate or deactivate the custom payment method.'
+    )
+
+    def __str__(self):
+        return self.label
