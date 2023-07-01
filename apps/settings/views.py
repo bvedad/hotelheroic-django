@@ -16,10 +16,10 @@ from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm,
     AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, \
     ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm, \
     generate_formset, SystemNotificationFormSet, CreditCardForm, BankTransferForm, PayPalForm, CustomPaymentMethodForm, \
-    CancellationPolicyForm, GeneralCancellationPolicyForm
+    CancellationPolicyForm, GeneralCancellationPolicyForm, BookingEngineSettingsForm
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, CreditCard, \
-    BankTransfer, PayPal, CustomPaymentMethod, CancellationPolicy, GeneralCancellationPolicy
+    BankTransfer, PayPal, CustomPaymentMethod, CancellationPolicy, GeneralCancellationPolicy, BookingEngineSettings
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
     AddOnIntervalTable, UserTable, CreditCardTable, CustomPaymentMethodTable, CancellationPolicyTable
@@ -789,3 +789,22 @@ class CancellationPolicyDeleteView(BSModalDeleteView):
     template_name = 'home/settings/property-configuration/cancellation-policy/delete.html'
     success_message = 'Success: Cancellation Policy was deleted.'
     success_url = reverse_lazy('settings_property_configuration_cancellation_policy_index')
+
+
+@login_required
+def settings_booking_engine_index_view(request):
+    return redirect('settings_booking_engine_settings_edit')
+
+
+@login_required
+def settings_booking_engine_settings_edit_view(request):
+    booking_engine_settings = BookingEngineSettings.objects.first()
+    if request.method == 'POST':
+        booking_engine_settings_form = BookingEngineSettingsForm(request.POST, instance=booking_engine_settings)
+        if booking_engine_settings_form.is_valid():
+            booking_engine_settings_form.save()
+    else:
+        booking_engine_settings_form = BookingEngineSettingsForm(instance=booking_engine_settings)
+    return render(request, 'home/settings/booking-engine/settings.html',
+                  {'form': booking_engine_settings_form
+                   })
