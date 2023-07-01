@@ -1,0 +1,11 @@
+{% extends "home/rate/interval/_base_interval.html" %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+{% block title %} Rates And Availabilities - Base Rate {% endblock %}
+
+{% block interval_content %}
+    <h5>Date ranges, rates and restrictions</h5>
+    <a href="{% url 'rate_interval_create' %}?room_type={{ request.GET.room_type }}" class="btn btn-primary btn-sm mb-2">Create</a>
+    {% render_table table 'django_tables2/bootstrap.html' %}
+{% endblock interval_content %}

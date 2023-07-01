@@ -15,7 +15,6 @@ urlpatterns = [
     path('reservations/', views.reservations_view, name='reservations'),
     path('groups/', views.groups_view, name='groups'),
     path('house-account/', views.house_account_view, name='house_account'),
-    path('rates-and-availability/', views.rates_availability_view, name='rates_availability'),
     path('guests/', views.guests_view, name='guests'),
     path('reports/', views.reports_view, name='reports'),
 ]

@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+{% block title %} Rates And Availabilities - Base Rate {% endblock %}
+
+{% block content %}
+    <ul class="nav nav-pills nav-fill flex-column flex-sm-row">
+        {% for room_type in room_types %}
+            <li class="nav-item flex-grow-0">
+                <a class="nav-link mb-sm-3 mb-md-0 {% if room_type.id|stringformat:"s" == request.GET.room_type %}active{% endif %}"
+                   href="{% url 'rate_interval_index' %}?room_type={{ room_type.id }}">{{ room_type.room_type_name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="p-4">
+        <p>
+            On this page you can set the base rates for any period, including specific days of the week and minimum and
+            maximum length of stay limitations. Base rates are also sometimes referred to as the BAR or Best Available
+            Rate.
+            Important: The base rate is valid for all channels (manual reservations in the system, online booking page,
+            and
+            connected OTAS.). Some OTAs do not allow you to set minimum and maximum length of stay limitations. Click
+            here
+            for more information.
+        </p>
+        {% block interval_content %}{% endblock interval_content %}
+    </div>
+{% endblock content %}
