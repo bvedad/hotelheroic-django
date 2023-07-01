@@ -14,14 +14,15 @@ from apps.room.models import RoomType
 from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm, TaxAndFeeForm, ReservationSourceForm, \
     RoomTypeForm, ItemCategoryForm, ItemForm, CustomFieldForm, HotelPhotoFormSet, GuestStatusForm, HotelAmenityForm, \
     AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, \
-    ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm, SystemNotificationForm, \
-    generate_formset, SystemNotificationFormSet, CreditCardForm, BankTransferForm, PayPalForm, CustomPaymentMethodForm
+    ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm, \
+    generate_formset, SystemNotificationFormSet, CreditCardForm, BankTransferForm, PayPalForm, CustomPaymentMethodForm, \
+    CancellationPolicyForm, GeneralCancellationPolicyForm
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, CreditCard, \
-    BankTransfer, PayPal, CustomPaymentMethod
+    BankTransfer, PayPal, CustomPaymentMethod, CancellationPolicy, GeneralCancellationPolicy
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
-    AddOnIntervalTable, UserTable, CreditCardTable, CustomPaymentMethodTable
+    AddOnIntervalTable, UserTable, CreditCardTable, CustomPaymentMethodTable, CancellationPolicyTable
 from apps.taxesandfees.models import TaxAndFee
 
 User = get_user_model()
@@ -747,3 +748,44 @@ class CustomPaymentMethodDeleteView(BSModalDeleteView):
     template_name = 'home/settings/property-configuration/custom-payment-method/delete.html'
     success_message = 'Success: Custom Payment Method was deleted.'
     success_url = reverse_lazy('settings_property_configuration_custom_payment_method_index')
+
+
+def cancellation_policy_list_view(request):
+    table = CancellationPolicyTable(CancellationPolicy.objects.all())
+    general_cancellation_policy = GeneralCancellationPolicy.objects.first()
+    if general_cancellation_policy is None:
+        general_cancellation_policy = GeneralCancellationPolicy()
+
+    if request.method == 'POST':
+        form = GeneralCancellationPolicyForm(request.POST, instance=general_cancellation_policy)
+        if form.is_valid():
+            form.save()
+    else:
+        form = GeneralCancellationPolicyForm(instance=general_cancellation_policy)
+
+    return render(request, "home/settings/property-configuration/cancellation-policy/index.html", {
+        "table": table,
+        'form': form
+    })
+
+
+class CancellationPolicyCreateView(BSModalCreateView):
+    template_name = 'home/settings/property-configuration/cancellation-policy/create.html'
+    form_class = CancellationPolicyForm
+    success_message = 'Success: Cancellation Policy was created.'
+    success_url = reverse_lazy('settings_property_configuration_cancellation_policy_index')
+
+
+class CancellationPolicyUpdateView(BSModalUpdateView):
+    model = CancellationPolicy
+    template_name = 'home/settings/property-configuration/cancellation-policy/edit.html'
+    form_class = CancellationPolicyForm
+    success_message = 'Success: Cancellation Policy was updated.'
+    success_url = reverse_lazy('settings_property_configuration_cancellation_policy_index')
+
+
+class CancellationPolicyDeleteView(BSModalDeleteView):
+    model = CancellationPolicy
+    template_name = 'home/settings/property-configuration/cancellation-policy/delete.html'
+    success_message = 'Success: Cancellation Policy was deleted.'
+    success_url = reverse_lazy('settings_property_configuration_cancellation_policy_index')

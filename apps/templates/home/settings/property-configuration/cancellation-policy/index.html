@@ -1,0 +1,68 @@
+{% extends "home/settings/property-configuration/_base_property_configuration.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+
+{% block property_configuration_content %}
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <p>Your cancellation policy will be displayed on the guest's reservation receipt along with your hotel contact
+        information. If the guest needs to cancel their reservation, it will be their responsibility to call you and
+        yours to provide the refund under the terms you have outlined. Any time a reservation has been canceled, you can
+        update the status of the reservation in your control panel, and that room will be liberated to be sold online
+        again.</p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% crispy form %}
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <hr/>
+    <h5>CANCELLATION POLICIES (THIS IS ONLY AN INFORMATIONAL FIELD FOR GUESTS, ANY CHARGES NEED TO BE INPUT) </h5>
+    <p>The policies added below are only informational for your guests, any charges incurred need to be added
+        manually.</p>
+    <button id="create-cancellation-policy" class="btn btn-primary" type="button" name="button">Create Cancellation
+        Policy
+    </button>
+
+    <script src="{% static 'js/bootstrap5.modal.forms.js' %}"></script>
+
+    <script>
+        // Get the deposit_type field
+        var policyTypeField = document.querySelector("#id_policy_type");
+
+        // Get the relevant field containers
+        var customContent = document.querySelector("#div_id_custom_content");
+
+        // Function to toggle the visibility of fields based on the selected deposit type
+        function toggleFieldsVisibility() {
+            var selectedDepositType = policyTypeField.value;
+
+            customContent.style.display = selectedDepositType === "custom" ? "block" : "none";
+        }
+
+        // Add event listener to the policy_type field
+        policyTypeField.addEventListener("change", toggleFieldsVisibility);
+
+        // Initial call to toggleFieldsVisibility
+        toggleFieldsVisibility();
+        document.addEventListener('DOMContentLoaded', (e) => {
+            modalForm(document.getElementById('create-cancellation-policy'), {
+                formURL: "{% url 'create_cancellation_policy' %}"
+            })
+            const updateButtons = document.querySelectorAll('.update-cancellation-policy');
+            updateButtons.forEach(button => {
+                modalForm(button, {
+                    formURL: button.dataset.formUrl
+                })
+            });
+
+        });
+    </script>
+
+    {% render_table table 'django_tables2/bootstrap.html' %}
+
+{% endblock property_configuration_content %}

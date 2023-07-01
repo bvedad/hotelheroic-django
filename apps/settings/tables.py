@@ -8,7 +8,7 @@ from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmen
 from apps.item.models import ItemCategory, Item
 from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
-from apps.settings.models import GuestStatus, AddOn, AddOnInterval, CreditCard, CustomPaymentMethod
+from apps.settings.models import GuestStatus, AddOn, AddOnInterval, CreditCard, CustomPaymentMethod, CancellationPolicy
 from apps.taxesandfees.models import TaxAndFee
 
 User = get_user_model()
@@ -182,3 +182,25 @@ class CustomPaymentMethodTable(tables.Table):
     class Meta:
         model = CustomPaymentMethod
         fields = ('label', 'is_active', 'actions')
+
+
+class CancellationPolicyTable(tables.Table):
+    actions = tables.Column(
+        empty_values=(),
+    )
+
+    def render_actions(self, record):
+        edit_url = reverse('update_cancellation_policy', args=[record.pk])
+        delete_url = reverse('delete_cancellation_policy', args=[record.pk])
+        return format_html("""
+        <button type="button" class="update-cancellation-policy btn btn-sm btn-primary" data-form-url="{}">{}</button>
+        <button type="button" class="update-cancellation-policy btn btn-sm btn-danger" data-form-url="{}">{}</button>
+        """, edit_url, heroicon_outline("pencil"), delete_url, heroicon_outline("trash"))
+
+    class Meta:
+        model = CancellationPolicy
+        fields = (
+            'policy_type',
+            'charge_type',
+            'days_before_arrival'
+        )
