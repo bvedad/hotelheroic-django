@@ -5,7 +5,7 @@
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
-{% block booking_engine_content %}
+{% block content %}
 
     <div class="nav-wrapper position-relative">
         <ul class="nav nav-pills nav-fill flex-column flex-sm-row">
@@ -13,12 +13,16 @@
                 <a class="nav-link mb-sm-3 mb-md-0 {% if 'booking-engine/settings' in request.path %} active {% endif %}"
                    href="{% url 'settings_booking_engine_settings_edit' %}">Settings</a>
             </li>
+            <li class="nav-item flex-grow-0">
+                <a class="nav-link mb-sm-3 mb-md-0 {% if 'booking-engine/customization' in request.path %} active {% endif %}"
+                   href="{% url 'settings_booking_engine_customization_edit' %}">Customization</a>
+            </li>
         </ul>
     </div>
 
-    {% block property_details_content %}
-    {% endblock property_details_content %}
-{% endblock booking_engine_content %}
+    {% block booking_engine_content %}
+    {% endblock booking_engine_content %}
+{% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}{% endblock javascripts %}

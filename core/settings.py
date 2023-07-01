@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'bootstrap_modal_forms',
     'django_filters',
     "heroicons",
+    'colorfield',
     'apps.home',  # Enable the inner home (home)
     'apps.authentication',
     'apps.app',

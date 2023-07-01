@@ -16,10 +16,11 @@ from apps.settings.forms import HotelForm, EmailTemplateForm, EmailScheduleForm,
     AddOnForm, AddOnIntervalForm, SystemSettingsForm, DepositPolicyForm, TermsAndConditionsForm, \
     ArrivalAndDepartureForm, ConfirmationPendingForm, InvoiceDetailsForm, InvoiceSettingsForm, \
     generate_formset, SystemNotificationFormSet, CreditCardForm, BankTransferForm, PayPalForm, CustomPaymentMethodForm, \
-    CancellationPolicyForm, GeneralCancellationPolicyForm, BookingEngineSettingsForm
+    CancellationPolicyForm, GeneralCancellationPolicyForm, BookingEngineSettingsForm, BookingEngineCustomizationForm
 from apps.settings.models import Hotel, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, CreditCard, \
-    BankTransfer, PayPal, CustomPaymentMethod, CancellationPolicy, GeneralCancellationPolicy, BookingEngineSettings
+    BankTransfer, PayPal, CustomPaymentMethod, CancellationPolicy, GeneralCancellationPolicy, BookingEngineSettings, \
+    BookingEngineCustomization
 from apps.settings.tables import EmailTemplateTable, EmailScheduleTable, TaxAndFeeTable, ReservationSourceTable, \
     RoomTypeTable, ItemCategoryTable, ItemTable, CustomFieldTable, GuestStatusTable, HotelAmenityTable, AddOnTable, \
     AddOnIntervalTable, UserTable, CreditCardTable, CustomPaymentMethodTable, CancellationPolicyTable
@@ -807,4 +808,19 @@ def settings_booking_engine_settings_edit_view(request):
         booking_engine_settings_form = BookingEngineSettingsForm(instance=booking_engine_settings)
     return render(request, 'home/settings/booking-engine/settings.html',
                   {'form': booking_engine_settings_form
+                   })
+
+
+@login_required
+def settings_booking_engine_customization_edit_view(request):
+    booking_engine_customization = BookingEngineCustomization.objects.first()
+    if request.method == 'POST':
+        booking_engine_customization_form = BookingEngineCustomizationForm(request.POST, request.FILES, instance=booking_engine_customization)
+        if booking_engine_customization_form.is_valid():
+            booking_engine_customization = booking_engine_customization_form.save()
+            booking_engine_customization_form = BookingEngineCustomizationForm(instance=booking_engine_customization)
+    else:
+        booking_engine_customization_form = BookingEngineCustomizationForm(instance=booking_engine_customization)
+    return render(request, 'home/settings/booking-engine/customization.html',
+                  {'form': booking_engine_customization_form
                    })
