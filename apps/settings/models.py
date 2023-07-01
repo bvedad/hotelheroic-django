@@ -336,6 +336,57 @@ class DepositPolicy(models.Model):
             raise ValidationError({'deposit_fixed_amount': 'This field is required for fixed amount deposit type.'})
 
 
+class CancellationPolicy(models.Model):
+    POLICY_TYPES = [
+        ('full_charge', 'Full Charge'),
+        ('partial_charge', 'Partial Charge'),
+        ('no_charge', 'No Charge'),
+    ]
+    TYPE_CHOICES = [
+        ('full_deposit', 'Full Deposit'),
+        ('full_stay', 'Full Stay'),
+    ]
+
+    policy_type = models.CharField(max_length=20, choices=POLICY_TYPES)
+    charge_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    days_before_arrival = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.get_policy_type_display()} - {self.get_charge_type_display()}"
+
+    class Meta:
+        verbose_name_plural = 'Cancellation Policies'
+
+
+class GeneralCancellationPolicy(models.Model):
+    POLICY_CHOICES = [
+        ('standardized', 'Use standardized cancellation policy'),
+        ('custom', 'Enter my own custom text policy'),
+    ]
+
+    policy_type = models.CharField(
+        max_length=20,
+        choices=POLICY_CHOICES,
+        default='standardized',
+        help_text='Select the cancellation policy type.'
+    )
+    custom_content = models.TextField(
+        blank=True,
+        null=True,
+        help_text='Enter your own custom text cancellation policy.',
+    )
+
+    def clean(self):
+        if self.policy_type == 'custom' and not self.custom_content:
+            raise ValidationError('Custom content is required for the selected policy type.')
+
+    def __str__(self):
+        return self.get_policy_type_display()
+
+    class Meta:
+        verbose_name_plural = 'General Cancellation Policies'
+
+
 class TermsAndConditions(models.Model):
     language = models.CharField(
         max_length=2,
@@ -573,6 +624,7 @@ class BankTransfer(models.Model):
 
     def __str__(self):
         return 'Bank Transfer Payment Option'
+
 
 class PayPal(models.Model):
     active = models.BooleanField(

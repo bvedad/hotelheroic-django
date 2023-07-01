@@ -1,9 +1,8 @@
 from bootstrap_modal_forms.forms import BSModalModelForm
-from crispy_forms.bootstrap import Modal
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, Div, Submit, Button, Field, HTML
-from django.forms import inlineformset_factory, formset_factory, BaseModelFormSet, modelformset_factory
+from crispy_forms.layout import Layout, Fieldset, Div, Submit, Button
+from django.forms import inlineformset_factory, modelformset_factory
 
 from apps.app.models import EmailTemplate, EmailSchedule, CustomField, HotelAmenity
 from apps.item.models import ItemCategory, Item
@@ -11,7 +10,7 @@ from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, SystemNotification, \
-    CreditCard, BankTransfer, PayPal, CustomPaymentMethod
+    CreditCard, BankTransfer, PayPal, CustomPaymentMethod, CancellationPolicy, GeneralCancellationPolicy
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -490,6 +489,28 @@ class PayPalForm(forms.ModelForm):
 class CustomPaymentMethodForm(BSModalModelForm):
     class Meta:
         model = CustomPaymentMethod
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+
+class CancellationPolicyForm(BSModalModelForm):
+    class Meta:
+        model = CancellationPolicy
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+
+class GeneralCancellationPolicyForm(forms.ModelForm):
+    class Meta:
+        model = GeneralCancellationPolicy
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):
