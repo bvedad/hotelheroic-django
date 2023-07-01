@@ -10,7 +10,8 @@ from apps.reservation.models import ReservationSource
 from apps.room.models import RoomType
 from apps.settings.models import Hotel, HotelPhoto, GuestStatus, AddOn, AddOnInterval, SystemSettings, DepositPolicy, \
     TermsAndConditions, ArrivalAndDeparture, ConfirmationPending, InvoiceDetails, InvoiceSettings, SystemNotification, \
-    CreditCard, BankTransfer, PayPal, CustomPaymentMethod, CancellationPolicy, GeneralCancellationPolicy
+    CreditCard, BankTransfer, PayPal, CustomPaymentMethod, CancellationPolicy, GeneralCancellationPolicy, \
+    BookingEngineSettings
 from apps.taxesandfees.models import TaxAndFee
 
 HotelPhotoFormSet = inlineformset_factory(
@@ -512,6 +513,17 @@ class GeneralCancellationPolicyForm(forms.ModelForm):
     class Meta:
         model = GeneralCancellationPolicy
         fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+
+class BookingEngineSettingsForm(forms.ModelForm):
+    class Meta:
+        model = BookingEngineSettings
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

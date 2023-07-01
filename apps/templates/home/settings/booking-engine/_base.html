@@ -1,0 +1,24 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Settings | Booking Engine {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block booking_engine_content %}
+
+    <div class="nav-wrapper position-relative">
+        <ul class="nav nav-pills nav-fill flex-column flex-sm-row">
+            <li class="nav-item flex-grow-0">
+                <a class="nav-link mb-sm-3 mb-md-0 {% if 'booking-engine/settings' in request.path %} active {% endif %}"
+                   href="{% url 'settings_booking_engine_settings_edit' %}">Settings</a>
+            </li>
+        </ul>
+    </div>
+
+    {% block property_details_content %}
+    {% endblock property_details_content %}
+{% endblock booking_engine_content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

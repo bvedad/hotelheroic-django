@@ -668,3 +668,69 @@ class CustomPaymentMethod(models.Model):
 
     def __str__(self):
         return self.label
+
+
+class BookingEngineSettings(models.Model):
+    GALLERY_DISPLAY_OPTIONS = [
+        ('lowest_price', 'Show Lowest Sales Price'),
+        ('accommodation_total', 'Show Accommodation Total Price for Stay')
+    ]
+
+    ACCOMMODATION_BOOKING_OPTIONS = [
+        ('specific', 'Allow guests to book specific accommodations'),
+        ('general', 'General booking for the selected room type')
+    ]
+
+    gallery_display_option = models.CharField(max_length=20, choices=GALLERY_DISPLAY_OPTIONS,
+                                              default='accommodation_total',
+                                              help_text='Select the option for displaying prices in the gallery design.')
+    room_types = models.ManyToManyField(RoomType)
+
+    hide_map = models.BooleanField(default=False, help_text='Hide the map on the booking page.')
+    opt_in_to_marketing = models.BooleanField(default=False,
+                                              help_text='Allow guests to opt-in to marketing emails during the booking process.')
+    marketing_content = models.TextField(blank=True, null=True,
+                                         help_text='Additional content explaining the marketing emails.')
+    opt_in_option = models.CharField(max_length=100, blank=True,
+                                     help_text='Text explaining the opt-in marketing option.')
+    opt_out_option = models.CharField(max_length=100, blank=True,
+                                      help_text='Text explaining the opt-out marketing option.')
+    accommodation_booking_option = models.CharField(max_length=20, choices=ACCOMMODATION_BOOKING_OPTIONS,
+                                                    default='general',
+                                                    help_text='Select the option for accommodation booking.')
+    ask_postal_address = models.BooleanField(default=False, help_text='Ask for a postal address.')
+    ask_nationality = models.BooleanField(default=False, help_text='Ask for nationality.')
+    ask_gender = models.BooleanField(default=False, help_text='Ask for gender.')
+    ask_personal_tax_id = models.BooleanField(default=False, help_text='Ask for personal tax ID number.')
+    ask_company_name = models.BooleanField(default=False, help_text='Ask for company name.')
+    ask_company_tax_id = models.BooleanField(default=False, help_text='Ask for company tax ID name.')
+    require_telephone_number = models.BooleanField(default=False, help_text='Require telephone number to book.')
+    ask_estimated_arrival_time = models.BooleanField(default=False,
+                                                     help_text='Ask for estimated arrival time during booking.')
+    require_terms_conditions = models.BooleanField(default=False,
+                                                   help_text='Require acceptance of terms and conditions.')
+    confirmation_email = models.BooleanField(default=False,
+                                             help_text='Send an automatic confirmation email to the guest.')
+    redirect_on_confirmation = models.BooleanField(default=False,
+                                                   help_text='Redirect guests to a custom URL after completing the booking.')
+    redirect_url = models.URLField(blank=True, null=True,
+                                   help_text='URL to redirect guests after completing the booking.')
+    # allotment_enabled = models.BooleanField(default=False,
+    #                                         help_text='Enable allotment to limit the number of rooms available.')
+    limit_same_type_accommodations = models.PositiveIntegerField(default=0,
+                                                                 help_text='Limit the number of rooms bookable in one reservation.')
+    ask_cvv_code = models.BooleanField(default=False, help_text='Ask for CVV code for credit card payments.')
+
+    # language_options = models.ManyToManyField(Language,
+    #                                           help_text='Select languages to appear on the booking engine.')
+
+    def __str__(self):
+        return f'{self.room_type} - Booking Engine Settings'
+
+    class Meta:
+        verbose_name_plural = 'Booking Engine Settings'
+
+    def clean(self):
+        if self.redirect_on_confirmation and not self.redirect_url:
+            raise ValidationError(
+                {'redirect_url': 'Redirect URL is required when redirect_on_confirmation is enabled.'})

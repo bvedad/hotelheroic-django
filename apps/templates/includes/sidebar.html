@@ -166,6 +166,12 @@
                                 <span class="sidebar-text">System Notifications</span>
                             </a>
                         </li>
+                        <li class="nav-item {% if 'booking-engine' in request.path %} active {% endif %}">
+                            <a href="{% url 'settings_booking_engine_index' %}" class="nav-link">
+                                <span class="sidebar-text-contracted">BE</span>
+                                <span class="sidebar-text">Booking Engine</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>

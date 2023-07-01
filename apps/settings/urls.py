@@ -132,4 +132,7 @@ urlpatterns = [
          name='settings_addon_interval_create'),
     path('system-notifications/', views.settings_system_notifications_edit_view,
          name='settings_system_notifications_edit'),
+    path('booking-engine/', views.settings_booking_engine_index_view, name='settings_booking_engine_index'),
+    path('booking-engine/settings/', views.settings_booking_engine_settings_edit_view,
+         name='settings_booking_engine_settings_edit'),
 ]
