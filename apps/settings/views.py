@@ -54,7 +54,7 @@ def settings_property_details_property_profile_view(request):
 
 @login_required
 def settings_property_configuration_view(request):
-    return redirect('settings_taxes_and_fees')
+    return redirect('settings_property_configuration_general_settings')
 
 
 @login_required

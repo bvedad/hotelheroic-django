@@ -42,11 +42,6 @@ def house_account_view(request):
 
 
 @login_required
-def rates_availability_view(request):
-    return render(request, 'home/rates-and-availability.html')
-
-
-@login_required
 def guests_view(request):
     return render(request, 'home/guests.html')
 
