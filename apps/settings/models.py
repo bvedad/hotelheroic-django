@@ -1,4 +1,5 @@
 from ckeditor.fields import RichTextField
+from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -734,3 +735,25 @@ class BookingEngineSettings(models.Model):
         if self.redirect_on_confirmation and not self.redirect_url:
             raise ValidationError(
                 {'redirect_url': 'Redirect URL is required when redirect_on_confirmation is enabled.'})
+
+
+class BookingEngineCustomization(models.Model):
+    background_color = ColorField(default='#FFFFFF')
+    header_color = ColorField(default='#000000')
+    room_arrow_color = ColorField(default='#000000')
+    search_button_color = ColorField(default='#000000')
+    general_button_color = ColorField(default='#000000')
+    custom_meta_tags = models.TextField(blank=True, null=True, help_text='Custom meta tags for the header')
+    custom_meta_tags_confirmation = models.TextField(blank=True, null=True,
+                                                     help_text='Custom meta tags for the confirmation page')
+    javascript_code_confirmation = models.TextField(blank=True, null=True,
+                                                    help_text='JavaScript code for the confirmation page')
+    display_property_photos = models.BooleanField(default=True, help_text='Display property photos on the booking page')
+    logo = models.ImageField(upload_to='logos', blank=True, null=True, help_text='Property logo')
+    custom_header = models.TextField(blank=True, null=True, help_text='Custom header for the booking page')
+    custom_footer = models.TextField(blank=True, null=True, help_text='Custom footer for the booking page')
+    no_availability_text = models.TextField(blank=True, null=True,
+                                            help_text='Custom text when there is no availability for the searched dates')
+
+    class Meta:
+        verbose_name_plural = 'Booking Engine Customizations'

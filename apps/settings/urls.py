@@ -135,4 +135,6 @@ urlpatterns = [
     path('booking-engine/', views.settings_booking_engine_index_view, name='settings_booking_engine_index'),
     path('booking-engine/settings/', views.settings_booking_engine_settings_edit_view,
          name='settings_booking_engine_settings_edit'),
+    path('booking-engine/customization/', views.settings_booking_engine_customization_edit_view,
+         name='settings_booking_engine_customization_edit'),
 ]
